@@ -12,6 +12,9 @@
         android:theme="@style/Theme.NITCeMagazine"
         tools:targetApi="31">
         <activity
+            android:name=".add_Editor_Reviewer"
+            android:exported="false" />
+        <activity
             android:name=".ReviewerPage"
             android:exported="false" />
         <activity
