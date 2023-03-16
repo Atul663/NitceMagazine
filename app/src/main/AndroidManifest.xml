@@ -29,6 +29,15 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".getStarted.splashScreen"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".getStarted.getStartedPage"
             android:exported="true" />
     </application>
 
