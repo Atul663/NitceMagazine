@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.nitcemagazine.MainActivity2;
+import com.example.nitcemagazine.MainActivityPages.MainActivity2;
 import com.example.nitcemagazine.R;
 
 
