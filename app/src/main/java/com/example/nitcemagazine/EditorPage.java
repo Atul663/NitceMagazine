@@ -56,6 +56,7 @@ public class EditorPage extends AppCompatActivity {
 
         ArticleId = getIntent().getStringExtra("article_id");
 
+
         dbreference.child("Articles").child(ArticleId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
