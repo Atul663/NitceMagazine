@@ -8,40 +8,35 @@
 
     <ImageView
         android:id="@+id/NITC_Logo_Background"
-        android:layout_width="410dp"
+        android:layout_width="0dp"
         android:layout_height="642dp"
-        android:layout_marginBottom="85dp"
         android:alpha=".08"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/nitc" />
+
 
     <TextView
         android:id="@+id/NITCeMagzine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="32dp"
         android:text="NITC e-Magzine"
         android:textColor="@color/black"
         android:textColorLink="#D60404"
         android:textSize="45sp"
         android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/input_Full_name_reg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/input_background"
         android:drawableLeft="@drawable/baseline_person_24"
@@ -58,7 +53,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NITCeMagzine" />
+        app:layout_constraintTop_toBottomOf="@+id/profilePictureSignUp" />
 
     <EditText
         android:id="@+id/input_Email_Reg"
@@ -88,7 +83,9 @@
         android:id="@+id/input_password_Reg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:background="@drawable/input_background"
         android:drawableLeft="@drawable/baseline_lock"
         android:drawablePadding="10dp"
@@ -102,16 +99,17 @@
         android:paddingBottom="10dp"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/input_Email_Reg"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/input_Email_Reg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_Email_Reg" />
 
     <EditText
         android:id="@+id/input_Confirm_password_reg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:background="@drawable/input_background"
         android:drawableLeft="@drawable/baseline_security_24"
         android:drawablePadding="10dp"
@@ -125,9 +123,8 @@
         android:paddingBottom="10dp"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/input_Email_Reg"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/input_Email_Reg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_password_Reg" />
 
 
@@ -135,12 +132,14 @@
         android:id="@+id/LinearLayout_Login_reg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="70dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="@+id/buttom_Register"
-        app:layout_constraintStart_toStartOf="@+id/buttom_Register"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttom_Register">
 
         <TextView
@@ -182,5 +181,16 @@
         app:layout_constraintTop_toBottomOf="@+id/input_Confirm_password_reg"
         app:strokeColor="@color/black"
         app:strokeWidth="1dp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profilePictureSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/NITCeMagzine"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
