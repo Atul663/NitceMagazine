@@ -39,15 +39,4 @@ public class splashScreen extends AppCompatActivity {
         },5000);
 
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
-        if(user!= null)
-        {
-            auth.signOut();
-        }
-    }
 }

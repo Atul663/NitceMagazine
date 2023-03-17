@@ -16,11 +16,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.nitcemagazine.AddEditor;
+import com.example.nitcemagazine.AddReviewer;
 import com.example.nitcemagazine.LoginAndSignUp.LoginActivity;
 import com.example.nitcemagazine.PostArticle.AddPostFragement;
 import com.example.nitcemagazine.R;
 import com.example.nitcemagazine.LoginAndSignUp.SignUpPage;
-import com.example.nitcemagazine.add_Editor_Reviewer;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -109,10 +110,15 @@ public class MainActivity2 extends AppCompatActivity {
                     ft.replace(R.id.content, new AddPostFragement()).addToBackStack("add post");
                     ft.commit();
                 } else if (id == R.id.addReviewerNavDrawer) {
-                    Intent intent = new Intent(MainActivity2.this, add_Editor_Reviewer.class);
+                    Intent intent = new Intent(MainActivity2.this, AddReviewer.class);
                     startActivity(intent);
 
-                } else {
+                }
+                else if (id == R.id.addEditorNavDrawer) {
+                    Intent intent = new Intent(MainActivity2.this, AddEditor.class);
+                    startActivity(intent);
+
+                }else {
                     auth.signOut();
                     Intent intent = new Intent(MainActivity2.this,LoginActivity.class);
                     startActivity(intent);
