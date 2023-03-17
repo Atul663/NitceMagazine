@@ -1,4 +1,4 @@
-package com.example.nitcemagazine;
+package com.example.nitcemagazine.LoginAndSignUp;
 
 public class UserDetails {
     public String name,role,email;

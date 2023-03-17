@@ -12,9 +12,6 @@
         android:theme="@style/Theme.NITCeMagazine"
         tools:targetApi="31">
         <activity
-            android:name=".AddEditor"
-            android:exported="false" />
-        <activity
             android:name=".add_Editor_Reviewer"
             android:exported="false" />
         <activity
@@ -31,13 +28,16 @@
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true" />
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+
         <activity
             android:name=".getStarted.splashScreen"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

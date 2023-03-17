@@ -1,4 +1,4 @@
-package com.example.nitcemagazine;
+package com.example.nitcemagazine.LoginAndSignUp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.nitcemagazine.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -113,7 +113,7 @@ public class SignUpPage extends AppCompatActivity {
         logIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignUpPage.this,LoginActivity.class);
+                Intent intent = new Intent(SignUpPage.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -136,7 +136,8 @@ public class SignUpPage extends AppCompatActivity {
                         {
                             Toast.makeText(SignUpPage.this, "Your account is created successfully", Toast.LENGTH_LONG).show();
                             UserDetails user = new UserDetails(name.getText().toString(), username.getText().toString());
-                            reference.child("User").child(auth.getCurrentUser().getUid()).setValue(user);
+                            reference.child("Student").child(auth.getCurrentUser().getUid()).setValue(user);
+                            reference.child("UserType").child(auth.getCurrentUser().getUid()).setValue("Student");
                             setProfilePicture();
                             Intent intent = new Intent(SignUpPage.this, LoginActivity.class);
                             startActivity(intent);
@@ -195,7 +196,7 @@ public class SignUpPage extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
 
                             String filePath = uri.toString();
-                            reference.child("User").child(auth.getCurrentUser().getUid()).child("profilePictures").setValue(filePath).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            reference.child("Student").child(auth.getCurrentUser().getUid()).child("profilePictures").setValue(filePath).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Toast.makeText(SignUpPage.this, "Success", Toast.LENGTH_SHORT).show();
@@ -222,7 +223,7 @@ public class SignUpPage extends AppCompatActivity {
 
         else
         {
-            reference.child("User").child(auth.getCurrentUser().getUid()).child("profilePictures").setValue("null");
+            reference.child("Student").child(auth.getCurrentUser().getUid()).child("profilePictures").setValue("null");
         }
     }
 }

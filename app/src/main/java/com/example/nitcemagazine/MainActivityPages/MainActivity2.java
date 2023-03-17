@@ -16,10 +16,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.nitcemagazine.LoginActivity;
+import com.example.nitcemagazine.LoginAndSignUp.LoginActivity;
 import com.example.nitcemagazine.PostArticle.AddPostFragement;
 import com.example.nitcemagazine.R;
-import com.example.nitcemagazine.SignUpPage;
+import com.example.nitcemagazine.LoginAndSignUp.SignUpPage;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -105,7 +105,7 @@ public class MainActivity2 extends AppCompatActivity {
                 } else if (id == R.id.addPostNavDrawer) {
                     FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
-                    ft.replace(R.id.content, new AddPostFragement());
+                    ft.replace(R.id.content, new AddPostFragement()).addToBackStack("add post");
                     ft.commit();
                 }else {
                     auth.signOut();
@@ -123,21 +123,36 @@ public class MainActivity2 extends AppCompatActivity {
     void headerDetails()
     {
         if(user != null) {
-            reference.child("User").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            reference.child("UserType").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    emailId.setText(snapshot.child("email").getValue().toString());
-                    role.setText(snapshot.child("role").getValue().toString());
-                    String profilePicture = snapshot.child("profilePictures").getValue().toString();
-                    System.out.println(profilePicture);
-                    if(profilePicture == null)
-                    {
-                        profileProfilePicture.setImageResource(R.drawable.ic_launcher_background);
-                    }
-                    else
-                    {
-                        Picasso.get().load(profilePicture).into(profileProfilePicture);
-                    }
+                    String roleOfUser = snapshot.getValue().toString();
+
+                    DatabaseReference ref = database.getReference();
+
+                    ref.child(roleOfUser).child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot1) {
+                            emailId.setText(snapshot1.child("email").getValue().toString());
+                            role.setText(snapshot1.child("role").getValue().toString());
+                            String profilePicture = snapshot1.child("profilePictures").getValue().toString();
+                            System.out.println(profilePicture);
+                            if(profilePicture == null )
+                            {
+                                profileProfilePicture.setImageResource(R.drawable.get_started_button);
+                            }
+                            else
+                            {
+                                Picasso.get().load(profilePicture).into(profileProfilePicture);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                 }
 
                 @Override
@@ -158,7 +173,7 @@ public class MainActivity2 extends AppCompatActivity {
 
 
     private void inflateMenu(char userRole) {
-        if(userRole == 's')
+        if(userRole == 'S')
         {
             navigationView.inflateMenu(R.menu.navigation_item_user);
         }
@@ -173,10 +188,10 @@ public class MainActivity2 extends AppCompatActivity {
 
         if(user != null) {
             char[] userRole = new char[1];
-            reference.child("User").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            reference.child("UserType").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    userRole[0] = snapshot.child("role").getValue().toString().charAt(0);
+                    userRole[0] = snapshot.getValue().toString().charAt(0);
                     inflateMenu(userRole[0]);
                 }
 
@@ -188,9 +203,8 @@ public class MainActivity2 extends AppCompatActivity {
 
         }
         else
-            inflateMenu('s');
+            inflateMenu('S');
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();

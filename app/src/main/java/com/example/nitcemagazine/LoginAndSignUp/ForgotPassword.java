@@ -1,4 +1,4 @@
-package com.example.nitcemagazine;
+package com.example.nitcemagazine.LoginAndSignUp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.nitcemagazine.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,7 +53,7 @@ public class ForgotPassword extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(ForgotPassword.this, "Email Sent", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(ForgotPassword.this,LoginActivity.class));
+                        startActivity(new Intent(ForgotPassword.this, LoginActivity.class));
                         finish();
                     }
                 })
