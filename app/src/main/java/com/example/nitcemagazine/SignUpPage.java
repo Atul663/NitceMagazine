@@ -136,7 +136,8 @@ public class SignUpPage extends AppCompatActivity {
                         {
                             Toast.makeText(SignUpPage.this, "Your account is created successfully", Toast.LENGTH_LONG).show();
                             UserDetails user = new UserDetails(name.getText().toString(), username.getText().toString());
-                            reference.child("User").child(auth.getCurrentUser().getUid()).setValue(user);
+                            reference.child("Student").child(auth.getCurrentUser().getUid()).setValue(user);
+                            reference.child("UserType").child(auth.getCurrentUser().getUid()).setValue("Student");
                             setProfilePicture();
                             Intent intent = new Intent(SignUpPage.this, LoginActivity.class);
                             startActivity(intent);
@@ -195,7 +196,7 @@ public class SignUpPage extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
 
                             String filePath = uri.toString();
-                            reference.child("User").child(auth.getCurrentUser().getUid()).child("profilePictures").setValue(filePath).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            reference.child("Student").child(auth.getCurrentUser().getUid()).child("profilePictures").setValue(filePath).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Toast.makeText(SignUpPage.this, "Success", Toast.LENGTH_SHORT).show();
@@ -222,7 +223,7 @@ public class SignUpPage extends AppCompatActivity {
 
         else
         {
-            reference.child("User").child(auth.getCurrentUser().getUid()).child("profilePictures").setValue("null");
+            reference.child("Student").child(auth.getCurrentUser().getUid()).child("profilePictures").setValue("null");
         }
     }
 }

@@ -45,21 +45,34 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         String id = commentList.get(position).getUserId();
 
 
-        holder.commntText.setText(commentList.get(position).getCommnet());
-        reference.child("User").child(id).addValueEventListener(new ValueEventListener() {
+        holder.commentText.setText(commentList.get(position).getCommnet());
+        DatabaseReference ref = database.getReference();
+
+        ref.child("UserType").child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                holder.commentUserName.setText(snapshot.child("name").getValue().toString());
-                String img = snapshot.child("profilePictures").getValue().toString();
+                String roleOfUser = snapshot.getValue().toString();
+                reference.child(roleOfUser).child(id).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        holder.commentUserName.setText(snapshot.child("name").getValue().toString());
+                        String img = snapshot.child("profilePictures").getValue().toString();
 
-                if (!img.equalsIgnoreCase("null")) {
-                    Picasso.get().load(img).into(holder.commentUserImage);
-                }
-                else
-                {
-                    Picasso.get().load(R.drawable.baseline_add_24).into(holder.commentUserImage);
-                }
+                        if (!img.equalsIgnoreCase("null")) {
+                            Picasso.get().load(img).into(holder.commentUserImage);
+                        }
+                        else
+                        {
+                            Picasso.get().load(R.drawable.baseline_add_24).into(holder.commentUserImage);
+                        }
 
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -67,6 +80,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
             }
         });
+
     }
 
     @Override
@@ -76,13 +90,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        TextView commntText,commentUserName;
+        TextView commentText,commentUserName;
         CircleImageView commentUserImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            commntText = itemView.findViewById(R.id.commentText);
+            commentText = itemView.findViewById(R.id.commentText);
             commentUserImage = itemView.findViewById(R.id.circleImageViewCommentUser);
             commentUserName = itemView.findViewById(R.id.commentUserName);
 

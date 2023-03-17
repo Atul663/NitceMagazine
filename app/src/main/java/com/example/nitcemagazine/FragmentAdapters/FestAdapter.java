@@ -58,12 +58,26 @@ public class FestAdapter extends RecyclerView.Adapter<FestAdapter.ViewHolder> {
                     String desc = snapshot.child("description").getValue().toString();
                     String img = snapshot.child("Article Image").getValue().toString();
 
+                    String uid = snapshot.child("authorUid").getValue().toString();
+
                     DatabaseReference ref = database.getReference();
-                    ref.child("User").child(snapshot.child("authorUid").getValue().toString()).addValueEventListener(new ValueEventListener() {
+                    DatabaseReference ref1 = database.getReference();
+                    ref1.child("UserType").child(uid).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            String author = snapshot.child("name").getValue().toString();
-                            holder.authorName.setText(author);
+                            String roleOfUser = snapshot.getValue().toString();
+                            ref.child(roleOfUser).child(uid).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    String author = snapshot.child("name").getValue().toString();
+                                    holder.authorName.setText(author);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
                         }
 
                         @Override

@@ -11,6 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NITCeMagazine"
         tools:targetApi="31">
+        <activity android:name=".ForgotPassword"
+            android:exported="false"/>
         <activity
             android:name=".add_Editor_Reviewer"
             android:exported="false" />
@@ -21,7 +23,7 @@
             android:name=".EditorPage"
             android:exported="false" />
         <activity
-            android:name=".MainActivity2"
+            android:name=".MainActivityPages.MainActivity2"
             android:exported="false" />
         <activity
             android:name=".SignUpPage"
