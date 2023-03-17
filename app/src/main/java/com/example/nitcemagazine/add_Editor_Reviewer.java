@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -22,7 +23,8 @@ public class add_Editor_Reviewer extends AppCompatActivity {
 
     EditText student_id;
     Button addReviewer;
-    DatabaseReference dbreference;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+//    DatabaseReference dbreference = database.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class add_Editor_Reviewer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //getValues of given email
-                DatabaseReference studentRef = dbreference.child("Student");
+                DatabaseReference studentRef = database.getReference().child("Student");
                 Query query = studentRef.orderByChild("email").equalTo(student_email);
 
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -56,10 +58,10 @@ public class add_Editor_Reviewer extends AppCompatActivity {
                                         String password= snapshot.child("password").getValue(String.class);
                                         String url=snapshot.child("pic").getValue(String.class);
                                         //remove from Student Table
-                                        dbreference.child("Student").child(uid).removeValue();
+                                        database.getReference().child("Student").child(uid).removeValue();
 
                                         //Store in Reviewer Table
-                                        DatabaseReference destRef = dbreference.child("Reviewer").push();
+                                        DatabaseReference destRef = database.getReference().child("Reviewer").push();
                                         destRef.child("email").setValue(email);
                                         destRef.child("name").setValue(name);
                                         destRef.child("password").setValue(password);

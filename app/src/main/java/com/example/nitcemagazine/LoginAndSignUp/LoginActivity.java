@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -117,7 +119,9 @@ public class LoginActivity extends AppCompatActivity {
                                 auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
+
                                         Toast.makeText(LoginActivity.this, "Please verify your email.", Toast.LENGTH_SHORT).show();
+
                                     }
                                 });
                             }
@@ -129,6 +133,20 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                 }
+
+                else
+                {
+                    if(task.getException() instanceof FirebaseAuthInvalidUserException)
+                    {
+                        Toast.makeText(LoginActivity.this, "Invalid User", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(task.getException() instanceof FirebaseAuthInvalidCredentialsException)
+                    {
+                        Toast.makeText(LoginActivity.this, "Password is wrong", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
             }
         });
     }

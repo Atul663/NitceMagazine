@@ -20,6 +20,7 @@ import com.example.nitcemagazine.LoginAndSignUp.LoginActivity;
 import com.example.nitcemagazine.PostArticle.AddPostFragement;
 import com.example.nitcemagazine.R;
 import com.example.nitcemagazine.LoginAndSignUp.SignUpPage;
+import com.example.nitcemagazine.add_Editor_Reviewer;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -107,7 +108,11 @@ public class MainActivity2 extends AppCompatActivity {
                     FragmentTransaction ft = fm.beginTransaction();
                     ft.replace(R.id.content, new AddPostFragement()).addToBackStack("add post");
                     ft.commit();
-                }else {
+                } else if (id == R.id.addReviewerNavDrawer) {
+                    Intent intent = new Intent(MainActivity2.this, add_Editor_Reviewer.class);
+                    startActivity(intent);
+
+                } else {
                     auth.signOut();
                     Intent intent = new Intent(MainActivity2.this,LoginActivity.class);
                     startActivity(intent);
