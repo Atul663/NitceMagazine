@@ -64,6 +64,14 @@
         <activity
             android:name=".UnpostedArticles"
             android:exported="true" />
+
+        <activity
+            android:name=".UnpostedArticles"
+            android:exported="true" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
