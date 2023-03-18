@@ -98,7 +98,7 @@ public class UnpostedArticleAdapter extends RecyclerView.Adapter<UnpostedArticle
         holder.articleCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(articleContext, ReviewerPage.class);
+                Intent intent = new Intent(articleContext, EditorPage.class);
                 intent.putExtra("ArticleIdIntent",id);
                 articleContext.startActivity(intent);
             }

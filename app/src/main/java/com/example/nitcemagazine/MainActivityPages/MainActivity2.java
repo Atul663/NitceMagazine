@@ -129,7 +129,8 @@ public class MainActivity2 extends AppCompatActivity {
                     startActivity(intent);
                     finishAffinity();
                 } else if (id == R.id.postArticleNavDrawer) {
-
+                    Intent intent = new Intent(MainActivity2.this, UnpostedArticles.class);
+                    startActivity(intent);
                 } else if (id == R.id.reviewArticleNavDrawer) {
                     Intent intent = new Intent(MainActivity2.this, UnpostedArticles.class);
                     startActivity(intent);
