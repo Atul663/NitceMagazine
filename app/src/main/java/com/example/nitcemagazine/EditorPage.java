@@ -41,7 +41,7 @@ public class EditorPage extends AppCompatActivity {
     String category;
     int reviewCount=0;
     Float prevRating;
-
+    float Rating=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,12 +63,12 @@ public class EditorPage extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //get Values from database
-                imageUrl = snapshot.child("ArticleImage").getValue(String.class);
-                prevRating=Float.parseFloat(snapshot.child("Rating").getValue().toString());
+                String imageUrl = snapshot.child("ArticleImage").getValue(String.class);
+                prevRating=Float.parseFloat(snapshot.child("Rating").getValue(String.class));
                 String content = snapshot.child("description").getValue(String.class);
                 String title = snapshot.child("title").getValue(String.class);
                 author=snapshot.child("authorUid").getValue(String.class);
-                reviewCount =Integer.parseInt(snapshot.child("reviewCount").getValue().toString());
+                reviewCount =Integer.parseInt(snapshot.child("reviewCount").getValue(String.class));
                 category=snapshot.child("Category").getValue(String.class);
 
                 //set Values into Views
@@ -76,7 +76,7 @@ public class EditorPage extends AppCompatActivity {
                 articletitle.setText(title);
                 description.setText(content);
                 ratingBar.setRating(prevRating);
-                String summ=reviewCount+"/5 reviewed by "+reviewCount+" reviewers";
+                String summ=Rating+"/5 reviewed by "+reviewCount+" reviewers";
                 ratingSummary.setText(summ);
             }
 
@@ -103,7 +103,6 @@ public class EditorPage extends AppCompatActivity {
                 map.put("authorUid",author);
                 map.put("Category",category);
                 map.put("Rating",prevRating.toString());
-                map.put("reviewCount",reviewCount);
 
                 //insert article in PostedArticleTable
                 dbreference.child("PostedArticle").child(ArticleId)
