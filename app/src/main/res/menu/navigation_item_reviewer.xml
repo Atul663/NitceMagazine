@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/signInNavDrawer"
         android:title="Sign In"
@@ -15,18 +16,11 @@
         android:icon="@drawable/baseline_add_24"/>
 
     <item
-        android:id="@+id/addEditorNavDrawer"
-        android:title="Add Editor"
-        android:icon="@drawable/baseline_add_24"/>
-
-    <item
-        android:id="@+id/addReviewerNavDrawer"
-        android:title="Add Reviewer"/>
+        android:id="@+id/reviewArticleNavDrawer"
+        android:title="Review Article"/>
 
 
     <item
         android:id="@+id/logoutNavDrawer"
         android:title="Logout"/>
-
-
 </menu>

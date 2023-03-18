@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,6 +49,8 @@ public class MainActivity2 extends AppCompatActivity {
     FirebaseUser user = auth.getCurrentUser();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
+    Menu menuView;
+    MenuItem signIn,signUp,logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class MainActivity2 extends AppCompatActivity {
         navigationDrawerIcon = findViewById(R.id.navigationDrawerIcon);
 
         View view = navigationView.getHeaderView(0);
+        menuView = navigationView.getMenu();
 
         emailId = view.findViewById(R.id.textViewEmailNavDrawer);
         role = view.findViewById(R.id.textViewRoleNavDrawer);
@@ -118,11 +122,15 @@ public class MainActivity2 extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity2.this, AddEditor.class);
                     startActivity(intent);
 
-                }else {
+                }else if (id == R.id.logoutNavDrawer){
                     auth.signOut();
-                    Intent intent = new Intent(MainActivity2.this,LoginActivity.class);
+                    Intent intent = new Intent(MainActivity2.this,MainActivity2.class);
                     startActivity(intent);
                     finishAffinity();
+                } else if (id == R.id.postArticleNavDrawer) {
+
+                } else if (id == R.id.reviewArticleNavDrawer) {
+
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);
@@ -134,6 +142,7 @@ public class MainActivity2 extends AppCompatActivity {
     void headerDetails()
     {
         if(user != null) {
+
             reference.child("UserType").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -191,7 +200,13 @@ public class MainActivity2 extends AppCompatActivity {
         else if(userRole == 'A')
         {
             navigationView.inflateMenu(R.menu.navigation_item_admin);
+        } else if (userRole == 'R') {
+            navigationView.inflateMenu(R.menu.navigation_item_reviewer);
+        } else if (userRole == 'E') {
+            navigationView.inflateMenu(R.menu.navigation_item_editor);
         }
+
+        setMenu();
     }
 
     void findRole()
@@ -215,6 +230,23 @@ public class MainActivity2 extends AppCompatActivity {
         }
         else
             inflateMenu('S');
+    }
+
+    void setMenu()
+    {
+        signIn = menuView.findItem(R.id.signInNavDrawer);
+        signUp = menuView.findItem(R.id.signUpNavDrawer);
+        logout = menuView.findItem(R.id.logoutNavDrawer);
+        if(user != null) {
+            signIn.setVisible(false);
+            signUp.setVisible(false);
+            logout.setVisible(true);
+        }
+        else {
+            signIn.setVisible(true);
+            signUp.setVisible(true);
+            logout.setVisible(false);
+        }
     }
     @Override
     public void onBackPressed() {

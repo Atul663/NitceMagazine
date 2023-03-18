@@ -51,8 +51,6 @@ public class AddEditor extends AppCompatActivity {
                         {
                             String roleOfUser = ds.getValue().toString();
 
-//                            toStringref1.child()
-
                             ref1.child(roleOfUser).child(ds.getKey()).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
