@@ -29,7 +29,8 @@ public class ReviewerPage extends AppCompatActivity {
 
     String ArticleId;
 
-    DatabaseReference dbreference;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference dbreference = database.getReference();
     int reviewCount=0;
     float prevRating=0;
 
@@ -44,19 +45,23 @@ public class ReviewerPage extends AppCompatActivity {
         ratingBar=(RatingBar) findViewById(R.id.ratingBar);
         submitButton=(Button)findViewById(R.id.submitRating);
 
-        dbreference= FirebaseDatabase.getInstance().getReference();
+//        dbreference= FirebaseDatabase.getInstance().getReference();
 
         ArticleId = getIntent().getStringExtra("ArticleIdIntent");
 
-        dbreference.child("Articles").child(ArticleId).addValueEventListener(new ValueEventListener() {
+        dbreference.child("Article").child(ArticleId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //get Values from database
+                System.out.println(ArticleId);
                 String imageUrl = snapshot.child("ArticleImage").getValue(String.class);
-                prevRating=Float.parseFloat(snapshot.child("Rating").getValue(String.class));
+                String rating = snapshot.child("Rating").getValue().toString();
+                prevRating=Float.parseFloat(rating);
                 String content = snapshot.child("description").getValue(String.class);
                 String title = snapshot.child("title").getValue(String.class);
-                reviewCount =Integer.parseInt(snapshot.child("reviewCount").getValue(String.class));
+                System.out.println(title);
+                String reviewCnt = snapshot.child("reviewCount").getValue().toString();
+                reviewCount =Integer.parseInt(reviewCnt);
 
                 //set Values into Views
                 Picasso.get().load(imageUrl).into(articleImage);
@@ -77,17 +82,14 @@ public class ReviewerPage extends AppCompatActivity {
                 // get the current rating from the rating bar
                 float currentRating = ratingBar.getRating();
 
-                // get the number of reviews for the article
-                DatabaseReference articleRef = dbreference.child("Articles").child(ArticleId);
-
                 // calculate the new average rating
                 float newRating = ((currentRating + (reviewCount * prevRating)) / (reviewCount + 1));
 
                 // update the review count
-                dbreference.child("Articles").child(ArticleId).child("reviewCount").setValue(reviewCount + 1);
+                dbreference.child("Article").child(ArticleId).child("reviewCount").setValue(reviewCount + 1);
 
                 // update the review rating
-                dbreference.child("Articles").child(ArticleId).child("Rating").setValue(newRating);
+                dbreference.child("Article").child(ArticleId).child("Rating").setValue(newRating);
 
                 // show a toast message to indicate that the review has been submitted
                 Toast.makeText(ReviewerPage.this, "Review submitted", Toast.LENGTH_SHORT).show();
