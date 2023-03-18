@@ -37,7 +37,10 @@ public class EditorPage extends AppCompatActivity {
     DatabaseReference dbreference;
 
     String imageUrl="";
+    String author;
+    String category;
     int reviewCount=0;
+    Float prevRating;
     float Rating=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,38 +57,25 @@ public class EditorPage extends AppCompatActivity {
 
         dbreference= FirebaseDatabase.getInstance().getReference();
 
-        ArticleId = getIntent().getStringExtra("article_id");
+        ArticleId = getIntent().getStringExtra("ArticleIdIntent");
 
-
-        dbreference.child("Articles").child(ArticleId).addValueEventListener(new ValueEventListener() {
+        dbreference.child("Article").child(ArticleId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //get Values from database
-                imageUrl = snapshot.child("imageUrl").getValue(String.class);
+                String imageUrl = snapshot.child("ArticleImage").getValue(String.class);
+                prevRating=Float.parseFloat(snapshot.child("Rating").getValue(String.class));
+                String content = snapshot.child("description").getValue(String.class);
                 String title = snapshot.child("title").getValue(String.class);
-                String content = snapshot.child("content").getValue(String.class);
+                author=snapshot.child("authorUid").getValue(String.class);
+                reviewCount =Integer.parseInt(snapshot.child("reviewCount").getValue(String.class));
+                category=snapshot.child("Category").getValue(String.class);
 
                 //set Values into Views
                 Picasso.get().load(imageUrl).into(articleImage);
                 articletitle.setText(title);
                 description.setText(content);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(EditorPage.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        dbreference.child("reviews").child(ArticleId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //get Values from database
-                reviewCount = snapshot.child("count").getValue(Integer.class);
-                Rating = snapshot.child("rating").getValue(Float.class);
-
-                //set Values into Views
-                ratingBar.setRating(Rating);
+                ratingBar.setRating(prevRating);
                 String summ=Rating+"/5 reviewed by "+reviewCount+" reviewers";
                 ratingSummary.setText(summ);
             }
@@ -96,11 +86,10 @@ public class EditorPage extends AppCompatActivity {
             }
         });
 
-
         reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbreference.child("Articles").child(ArticleId).removeValue();
+                dbreference.child("Article").child(ArticleId).removeValue();
             }
         });
 
@@ -108,19 +97,22 @@ public class EditorPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Map<String,Object> map=new HashMap<>();
-                map.put("ArticleId",ArticleId);
                 map.put("title",articletitle.getText());
-                map.put("content",description.getText());
-                map.put("imageURL",imageUrl);
-                //map.put("Author",);  getAuthor Things done
+                map.put("description",description.getText());
+                map.put("ArticleImage",imageUrl);
+                map.put("authorUid",author);
+                map.put("Category",category);
+                map.put("Rating",prevRating.toString());
 
                 //insert article in PostedArticleTable
-                dbreference.child("PostedArticles").push()
+                dbreference.child("PostedArticle").child(ArticleId)
                         .setValue(map)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
                                 Toast.makeText(EditorPage.this, "Article Posted Successfully", Toast.LENGTH_SHORT).show();
+                                //delete from Articles Table
+                                dbreference.child("Article").child(ArticleId).removeValue();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -129,9 +121,6 @@ public class EditorPage extends AppCompatActivity {
                                 Toast.makeText(EditorPage.this, "error :"+e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
-
-                //delete from Articles Table
-                dbreference.child("Articles").child(ArticleId).removeValue();
             }
         });
     }

@@ -60,6 +60,10 @@
         <activity
             android:name=".ViewArticle"
             android:exported="true" />
+
+        <activity
+            android:name=".UnpostedArticles"
+            android:exported="true" />
     </application>
 
 </manifest>
