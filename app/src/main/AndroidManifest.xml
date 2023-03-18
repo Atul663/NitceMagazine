@@ -56,6 +56,10 @@
         <activity
             android:name=".getStarted.getStartedPage"
             android:exported="true" />
+
+        <activity
+            android:name=".ViewArticle"
+            android:exported="true" />
     </application>
 
 </manifest>
