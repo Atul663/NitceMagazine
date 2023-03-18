@@ -1,4 +1,4 @@
-package com.example.nitcemagazine.FragmentAdapters;
+package com.example.nitcemagazine;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.nitcemagazine.R;
-import com.example.nitcemagazine.ViewArticle;
+import com.example.nitcemagazine.FragmentAdapters.EducationalAdapter;
+import com.example.nitcemagazine.FragmentAdapters.ModelClass;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,8 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-
-public class TechnicalAdapter extends RecyclerView.Adapter<TechnicalAdapter.ViewHolder> {
+public class UnpostedArticleAdapter extends RecyclerView.Adapter<UnpostedArticleAdapter.ViewHolder>{
 
     List<ModelClass> articleList;
     Context articleContext;
@@ -32,29 +31,28 @@ public class TechnicalAdapter extends RecyclerView.Adapter<TechnicalAdapter.View
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
 
-    public TechnicalAdapter(List<ModelClass> articleList,Context articleContext) {
+    public UnpostedArticleAdapter(List<ModelClass> articleList, Context articleContext) {
         this.articleList = articleList;
         this.articleContext = articleContext;
     }
 
-
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public UnpostedArticleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_with_image,parent,false);
-        return new ViewHolder(view);
+
+        return new UnpostedArticleAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull UnpostedArticleAdapter.ViewHolder holder, int position) {
         String id = articleList.get(position).getId();
         reference.child("Article").child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String title = snapshot.child("title").getValue().toString();
                 String desc = snapshot.child("description").getValue().toString();
-                String img = snapshot.child("ArticleImage").getValue().toString();
+//                String img = snapshot.child("Article Image").getValue().toString();
 
                 String uid = snapshot.child("authorUid").getValue().toString();
 
@@ -83,18 +81,11 @@ public class TechnicalAdapter extends RecyclerView.Adapter<TechnicalAdapter.View
 
                     }
                 });
-
                 holder.articelTitle.setText(title);
                 holder.articleDesc.setText(desc);
 
-                if(!img.equalsIgnoreCase("null"))
-                {
-                    Picasso.get().load(img).into(holder.articleImageCard);
-                }
-                else
-                {
-                    holder.articleImageCard.setVisibility(View.GONE);
-                }
+
+                holder.articleImageCard.setVisibility(View.GONE);
 
             }
 
@@ -107,32 +98,27 @@ public class TechnicalAdapter extends RecyclerView.Adapter<TechnicalAdapter.View
         holder.articleCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(articleContext, ViewArticle.class);
+                Intent intent = new Intent(articleContext, ReviewerPage.class);
                 intent.putExtra("ArticleIdIntent",id);
                 articleContext.startActivity(intent);
             }
         });
 
+
+
     }
 
     @Override
     public int getItemCount() {
-        int count = 0;
-        for (int i = 0; i < articleList.size(); i++)
-        {
-            if(articleList.get(i).getCategory().equalsIgnoreCase("Technical"))
-            {
-                count++;
-            }
-        }
-        return count;
+        return articleList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
-    {
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
         TextView articelTitle,articleDesc,authorName;
         ImageView articleImageCard;
         CardView articleCardView;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -145,6 +131,4 @@ public class TechnicalAdapter extends RecyclerView.Adapter<TechnicalAdapter.View
 
         }
     }
-
 }
-

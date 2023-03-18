@@ -31,11 +31,10 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder> 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
 
-    public SportAdapter(List<ModelClass> articleList) {
+    public SportAdapter(List<ModelClass> articleList,Context articleContext) {
         this.articleList = articleList;
-//        this.articleContext = articleContext;
+        this.articleContext = articleContext;
     }
-
 
 
     @NonNull
@@ -54,7 +53,7 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder> 
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String title = snapshot.child("title").getValue().toString();
                 String desc = snapshot.child("description").getValue().toString();
-                String img = snapshot.child("Article Image").getValue().toString();
+                String img = snapshot.child("ArticleImage").getValue().toString();
 
                 String uid = snapshot.child("authorUid").getValue().toString();
 
@@ -108,6 +107,7 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(articleContext, ViewArticle.class);
+                intent.putExtra("ArticleIdIntent",id);
                 articleContext.startActivity(intent);
             }
         });

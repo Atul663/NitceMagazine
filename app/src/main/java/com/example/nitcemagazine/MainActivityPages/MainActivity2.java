@@ -23,6 +23,7 @@ import com.example.nitcemagazine.LoginAndSignUp.LoginActivity;
 import com.example.nitcemagazine.PostArticle.AddPostFragement;
 import com.example.nitcemagazine.R;
 import com.example.nitcemagazine.LoginAndSignUp.SignUpPage;
+import com.example.nitcemagazine.UnpostedArticles;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -130,7 +131,8 @@ public class MainActivity2 extends AppCompatActivity {
                 } else if (id == R.id.postArticleNavDrawer) {
 
                 } else if (id == R.id.reviewArticleNavDrawer) {
-
+                    Intent intent = new Intent(MainActivity2.this, UnpostedArticles.class);
+                    startActivity(intent);
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);

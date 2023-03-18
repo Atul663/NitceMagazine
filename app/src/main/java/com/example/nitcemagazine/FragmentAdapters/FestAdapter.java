@@ -32,11 +32,10 @@ public class FestAdapter extends RecyclerView.Adapter<FestAdapter.ViewHolder> {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
 
-    public FestAdapter(List<ModelClass> articleList) {
+    public FestAdapter(List<ModelClass> articleList,Context articleContext) {
         this.articleList = articleList;
-//        this.articleContext = articleContext;
+        this.articleContext = articleContext;
     }
-
 
 
     @NonNull
@@ -56,7 +55,7 @@ public class FestAdapter extends RecyclerView.Adapter<FestAdapter.ViewHolder> {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String title = snapshot.child("title").getValue().toString();
                     String desc = snapshot.child("description").getValue().toString();
-                    String img = snapshot.child("Article Image").getValue().toString();
+                    String img = snapshot.child("ArticleImage").getValue().toString();
 
                     String uid = snapshot.child("authorUid").getValue().toString();
 
@@ -113,6 +112,7 @@ public class FestAdapter extends RecyclerView.Adapter<FestAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(articleContext, ViewArticle.class);
+                intent.putExtra("ArticleIdIntent",id);
                 articleContext.startActivity(intent);
             }
         });

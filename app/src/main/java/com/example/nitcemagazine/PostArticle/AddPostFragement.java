@@ -55,6 +55,8 @@ public class AddPostFragement extends Fragment {
     FirebaseStorage storage;
     StorageReference storageReference;
 
+    String filePath;
+
 
     public AddPostFragement() {
         // Required empty public constructor
@@ -119,11 +121,10 @@ public class AddPostFragement extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArticleDetails articleDetails = new ArticleDetails(title.getText().toString(),description.getText().toString(),categorySelected,auth.getCurrentUser().getUid());
+                ArticleDetails articleDetails = new ArticleDetails(title.getText().toString(),description.getText().toString(),categorySelected,auth.getCurrentUser().getUid(),filePath);
                 key = reference.child("Article").push().getKey();
-
                 reference.child("Article").child(key).setValue(articleDetails);
-                setArticleImage();
+//                setArticleImage();
                 Intent intent = new Intent(getActivity(), MainActivity2.class);
                 startActivity(intent);
                 getActivity().finish();
@@ -145,6 +146,7 @@ public class AddPostFragement extends Fragment {
         if (requestCode == 1 && resultCode == getActivity().RESULT_OK && data != null) {
             imageUri = data.getData();
             imgControl = true;
+            setArticleImage();
         }
         else
         {
@@ -167,18 +169,18 @@ public class AddPostFragement extends Fragment {
                         @Override
                         public void onSuccess(Uri uri) {
 
-                            String filePath = uri.toString();
-                            reference.child("Article").child(key).child("Article Image").setValue(filePath).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-//                                    Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-//                                    Toast.makeText(getActivity(), "Fail", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            filePath = uri.toString();
+//                            reference.child("Article").child(key).child("Article Image").setValue(filePath).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                @Override
+//                                public void onSuccess(Void unused) {
+////                                    Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+////                                    Toast.makeText(getActivity(), "Fail", Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
                         }
                     });
                 }
@@ -196,5 +198,4 @@ public class AddPostFragement extends Fragment {
             reference.child("Article").child(key).child("Article Image").setValue("null");
         }
     }
-
 }

@@ -55,7 +55,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String title = snapshot.child("title").getValue().toString();
                     String desc = snapshot.child("description").getValue().toString();
-                    String img = snapshot.child("Article Image").getValue().toString();
+                    String img = snapshot.child("ArticleImage").getValue().toString();
                     String uid = snapshot.child("authorUid").getValue().toString();
 
                     DatabaseReference ref = database.getReference();

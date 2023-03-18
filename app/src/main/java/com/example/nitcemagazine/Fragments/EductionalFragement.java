@@ -86,7 +86,7 @@ public class EductionalFragement extends Fragment {
 
             }
         });
-        adapter = new EducationalAdapter(articleList);
+        adapter = new EducationalAdapter(articleList, getContext());
         recyclerView.setAdapter(adapter);
     }
 }

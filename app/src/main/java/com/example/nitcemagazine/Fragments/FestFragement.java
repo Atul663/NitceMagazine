@@ -89,7 +89,7 @@ public class FestFragement extends Fragment {
             }
         });
         System.out.println(articleList.size());
-        adapter = new FestAdapter(articleList);
+        adapter = new FestAdapter(articleList, getContext());
         recyclerView.setAdapter(adapter);
     }
 }

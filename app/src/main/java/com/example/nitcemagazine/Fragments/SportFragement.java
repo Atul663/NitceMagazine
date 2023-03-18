@@ -86,7 +86,7 @@ public class SportFragement extends Fragment {
 
             }
         });
-        adapter = new SportAdapter(articleList);
+        adapter = new SportAdapter(articleList, getContext());
         recyclerView.setAdapter(adapter);
     }
 }

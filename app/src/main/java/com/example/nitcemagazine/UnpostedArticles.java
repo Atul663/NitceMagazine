@@ -1,19 +1,17 @@
-package com.example.nitcemagazine.Fragments;
+package com.example.nitcemagazine;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import static java.security.AccessController.getContext;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Bundle;
+
+import com.example.nitcemagazine.FragmentAdapters.EducationalAdapter;
 import com.example.nitcemagazine.FragmentAdapters.ModelClass;
-import com.example.nitcemagazine.FragmentAdapters.TechnicalAdapter;
-import com.example.nitcemagazine.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -25,29 +23,29 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TechnicalFragement extends Fragment {
-    List<ModelClass> articleList;
-    TechnicalAdapter adapter;
-    RecyclerView recyclerView;
+public class UnpostedArticles extends AppCompatActivity {
+
+    RecyclerView unpostedArticle;
+    UnpostedArticleAdapter unpostedArticleAdapter;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = auth.getCurrentUser();
+    List<ModelClass> articleList;
+
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
     ModelClass modelClass = new ModelClass();
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.technical_fragement,null);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_unposted_articles);
 
-        recyclerView = view.findViewById(R.id.recyclerViewTechnical);
+        unpostedArticle = findViewById(R.id.recyclerViewUnpostedArticle);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        unpostedArticle.setLayoutManager(new LinearLayoutManager(this));
 
         articleList = new ArrayList<>();
 
         getArticle();
-
-        return view;
     }
 
     void getArticle()
@@ -56,14 +54,9 @@ public class TechnicalFragement extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 modelClass = snapshot.getValue(ModelClass.class);
-                if(modelClass.getCategory().equalsIgnoreCase("technical")) {
-
-                    articleList.add(modelClass);
-                    modelClass.setId(snapshot.getKey());
-                    adapter.notifyDataSetChanged();
-                }
-
-
+                articleList.add(modelClass);
+                modelClass.setId(snapshot.getKey());
+                unpostedArticleAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -86,7 +79,9 @@ public class TechnicalFragement extends Fragment {
 
             }
         });
-        adapter = new TechnicalAdapter(articleList, getContext());
-        recyclerView.setAdapter(adapter);
+        unpostedArticleAdapter = new UnpostedArticleAdapter(articleList, UnpostedArticles.this);
+        unpostedArticle.setAdapter(unpostedArticleAdapter);
     }
+
+
 }
