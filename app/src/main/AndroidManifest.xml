@@ -12,17 +12,19 @@
         android:theme="@style/Theme.NITCeMagazine"
         tools:targetApi="31">
         <activity
-            android:name=".UnpostedArticles"
-            android:exported="false" />
-        <activity
             android:name=".AddReviewer"
-            android:exported="true"></activity>
+            android:exported="true" >
+
+
+        </activity>
         <activity
             android:name=".AddEditor"
             android:exported="true" />
         <activity
             android:name=".ReviewerPage"
-            android:exported="true"></activity>
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".EditorPage"
             android:exported="false" />
@@ -31,13 +33,20 @@
             android:exported="false" />
         <activity
             android:name=".LoginAndSignUp.SignUpPage"
-            android:exported="true"></activity>
+            android:exported="true" >
+
+
+
+        </activity>
         <activity
             android:name=".LoginAndSignUp.LoginActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+
+        </activity>
+
         <activity
             android:name=".getStarted.splashScreen"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,10 +55,6 @@
         </activity>
         <activity
             android:name=".getStarted.getStartedPage"
-            android:exported="true" />
-
-        <activity
-            android:name=".ViewArticle"
             android:exported="true" />
     </application>
 
