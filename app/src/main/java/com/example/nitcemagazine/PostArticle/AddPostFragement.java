@@ -55,7 +55,7 @@ public class AddPostFragement extends Fragment {
     FirebaseStorage storage;
     StorageReference storageReference;
 
-    String filePath;
+    String filePath = "null";
 
 
     public AddPostFragement() {

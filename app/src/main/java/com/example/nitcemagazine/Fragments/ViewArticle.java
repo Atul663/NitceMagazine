@@ -1,4 +1,4 @@
-package com.example.nitcemagazine;
+package com.example.nitcemagazine.Fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.nitcemagazine.Comment.CommentAdapter;
 import com.example.nitcemagazine.Comment.CommentDetailClass;
 import com.example.nitcemagazine.Comment.CommentModelClass;
+import com.example.nitcemagazine.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -62,7 +63,7 @@ public class ViewArticle extends AppCompatActivity {
         id = getIntent().getStringExtra("ArticleIdIntent");
 
         getComment();
-        reference.child("Article").child(id).addValueEventListener(new ValueEventListener() {
+        reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String title = snapshot.child("title").getValue().toString();

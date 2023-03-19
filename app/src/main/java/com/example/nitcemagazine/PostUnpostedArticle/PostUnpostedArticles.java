@@ -1,17 +1,13 @@
-package com.example.nitcemagazine.Fragments;
-
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+package com.example.nitcemagazine.PostUnpostedArticle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.nitcemagazine.FragmentAdapters.HomeAdapter;
+import android.os.Bundle;
+
 import com.example.nitcemagazine.FragmentAdapters.ModelClass;
 import com.example.nitcemagazine.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,48 +17,48 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragement extends Fragment {
-    List<ModelClass> articleList;
-    HomeAdapter adapter;
-    RecyclerView recyclerView;
+public class PostUnpostedArticles extends AppCompatActivity {
+
+    RecyclerView unpostedArticle;
+    PostUnpostedArticleAdapter postUnpostedArticleAdapter;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = auth.getCurrentUser();
+    List<ModelClass> articleList;
+    List<String > reviewCount;
+
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
     ModelClass modelClass = new ModelClass();
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home_fragement,null);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_unposted_articles);
 
-        recyclerView = view.findViewById(R.id.recyclerViewHome);
+        unpostedArticle = findViewById(R.id.recyclerViewUnpostedArticle);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        unpostedArticle.setLayoutManager(new LinearLayoutManager(this));
 
         articleList = new ArrayList<>();
 
         getArticle();
-
-        return view;
     }
 
     void getArticle()
     {
-        reference.child("PostedArticle").addChildEventListener(new ChildEventListener() {
+        reference.child("Article").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 modelClass = snapshot.getValue(ModelClass.class);
-                String cat = snapshot.child("category").getValue().toString();
-                if(modelClass.getCategory().equalsIgnoreCase("home")) {
-                    articleList.add(modelClass);
-                    modelClass.setId(snapshot.getKey());
-                    adapter.notifyDataSetChanged();
-                }
+                DatabaseReference ref = database.getReference();
 
+                articleList.add(modelClass);
+                modelClass.setId(snapshot.getKey());
+                postUnpostedArticleAdapter.notifyDataSetChanged();
 
             }
 
@@ -86,7 +82,9 @@ public class HomeFragement extends Fragment {
 
             }
         });
-        adapter = new HomeAdapter(articleList, getContext());
-        recyclerView.setAdapter(adapter);
+        postUnpostedArticleAdapter = new PostUnpostedArticleAdapter(articleList, PostUnpostedArticles.this);
+        unpostedArticle.setAdapter(postUnpostedArticleAdapter);
     }
+
+
 }

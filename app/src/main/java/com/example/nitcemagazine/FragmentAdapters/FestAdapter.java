@@ -13,7 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nitcemagazine.R;
-import com.example.nitcemagazine.ViewArticle;
+import com.example.nitcemagazine.Fragments.ViewArticle;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,7 +50,7 @@ public class FestAdapter extends RecyclerView.Adapter<FestAdapter.ViewHolder> {
 
         String id = articleList.get(position).getId();
 
-            reference.child("Article").child(id).addValueEventListener(new ValueEventListener() {
+            reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String title = snapshot.child("title").getValue().toString();

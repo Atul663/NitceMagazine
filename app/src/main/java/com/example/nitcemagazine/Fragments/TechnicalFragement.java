@@ -52,7 +52,7 @@ public class TechnicalFragement extends Fragment {
 
     void getArticle()
     {
-        reference.child("Article").addChildEventListener(new ChildEventListener() {
+        reference.child("PostedArticle").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 modelClass = snapshot.getValue(ModelClass.class);

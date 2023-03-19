@@ -1,4 +1,4 @@
-package com.example.nitcemagazine;
+package com.example.nitcemagazine.AddReviewerAndEditor;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.nitcemagazine.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,22 +20,21 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AddReviewer extends AppCompatActivity {
-
+public class AddEditor extends AppCompatActivity {
     EditText student_id;
-    Button addReviewer,getUser;
+    Button addEditor,getUser;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-//    DatabaseReference dbreference = database.getReference();
+    //    DatabaseReference dbreference = database.getReference();
     DatabaseReference studentRef;
     ArrayList<String > stdList = new ArrayList<>();
     ArrayList<String> stdRole = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_editor_reviewer);
-
+        setContentView(R.layout.activity_add_editor);
         getUser = findViewById(R.id.get_user);
-        addReviewer=(Button) findViewById(R.id.buttom_add_editor);
+        addEditor=(Button) findViewById(R.id.buttom_add_editor);
         student_id=(EditText) findViewById(R.id.input_Email_add_editor);
 
         getUser.setOnClickListener(new View.OnClickListener() {
@@ -50,8 +50,6 @@ public class AddReviewer extends AppCompatActivity {
                         for (DataSnapshot ds : snapshot.getChildren())
                         {
                             String roleOfUser = ds.getValue().toString();
-
-//                            toStringref1.child()
 
                             ref1.child(roleOfUser).child(ds.getKey()).addValueEventListener(new ValueEventListener() {
                                 @Override
@@ -78,6 +76,8 @@ public class AddReviewer extends AppCompatActivity {
                                 }
                             });
                         }
+
+
                     }
 
                     @Override
@@ -87,7 +87,7 @@ public class AddReviewer extends AppCompatActivity {
                 });
             }
         });
-        addReviewer.setOnClickListener(new View.OnClickListener() {
+        addEditor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //getValues of given email
@@ -95,7 +95,7 @@ public class AddReviewer extends AppCompatActivity {
 
                 if(stdRole.get(0).equalsIgnoreCase("student"))
                 {
-                    Toast.makeText(AddReviewer.this, "Student", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddEditor.this, "Successfully added a Editor", Toast.LENGTH_SHORT).show();
                     DatabaseReference ref = database.getReference();
 
                     ref.child("Student").child(stdList.get(0)).addValueEventListener(new ValueEventListener() {
@@ -110,16 +110,16 @@ public class AddReviewer extends AppCompatActivity {
                                 mp.put("name", name);
                                 mp.put("profilePictures", profilePictures);
                                 mp.put("email", email);
-                                mp.put("role", "Reviewer");
+                                mp.put("role", "Editor");
 
                                 DatabaseReference ref1 = database.getReference();
 
 
-                                ref1.child("Reviewer").child(stdList.get(0)).setValue(mp).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                ref1.child("Editor").child(stdList.get(0)).setValue(mp).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
                                         DatabaseReference ref2 = database.getReference();
-                                        ref2.child("UserType").child(stdList.get(0)).setValue("Reviewer").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        ref2.child("UserType").child(stdList.get(0)).setValue("Editor").addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 ref2.child("Student").child(stdList.get(0)).removeValue();
@@ -142,15 +142,58 @@ public class AddReviewer extends AppCompatActivity {
                     });
 
                 } else if (stdRole.get(0).equalsIgnoreCase("Reviewer")) {
-                    Toast.makeText(AddReviewer.this, "Already a reviewer", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddEditor.this, "Successfully added a Editor", Toast.LENGTH_SHORT).show();
+                    DatabaseReference ref = database.getReference();
+
+                    ref.child("Reviewer").child(stdList.get(0)).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            try {
+                                String email = snapshot.child("email").getValue().toString();
+                                String name = snapshot.child("name").getValue().toString();
+                                String profilePictures = snapshot.child("profilePictures").getValue().toString();
+
+                                HashMap<String, String> mp = new HashMap<>();
+                                mp.put("name", name);
+                                mp.put("profilePictures", profilePictures);
+                                mp.put("email", email);
+                                mp.put("role", "Editor");
+
+                                DatabaseReference ref1 = database.getReference();
+
+
+                                ref1.child("Editor").child(stdList.get(0)).setValue(mp).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        DatabaseReference ref2 = database.getReference();
+                                        ref2.child("UserType").child(stdList.get(0)).setValue("Editor").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                ref2.child("Reviewer").child(stdList.get(0)).removeValue();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            catch (Exception e)
+                            {
+                                System.out.println();
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
                 else if (stdRole.get(0).equalsIgnoreCase("Editor")) {
-                    Toast.makeText(AddReviewer.this, "Already a Editor", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddEditor.this, "Already a Editor", Toast.LENGTH_SHORT).show();
                 }
                 else if (stdRole.get(0).equalsIgnoreCase("Admin")) {
-                    Toast.makeText(AddReviewer.this, "Already a Admin", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddEditor.this, "Already a Admin", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }

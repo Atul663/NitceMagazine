@@ -1,4 +1,4 @@
-package com.example.nitcemagazine;
+package com.example.nitcemagazine.PostUnpostedArticle;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,82 +12,90 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.nitcemagazine.FragmentAdapters.EducationalAdapter;
 import com.example.nitcemagazine.FragmentAdapters.ModelClass;
+import com.example.nitcemagazine.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class UnpostedArticleAdapter extends RecyclerView.Adapter<UnpostedArticleAdapter.ViewHolder>{
+public class PostUnpostedArticleAdapter extends RecyclerView.Adapter<PostUnpostedArticleAdapter.ViewHolder>{
 
     List<ModelClass> articleList;
     Context articleContext;
+    List<String > reviewCount;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
 
-    public UnpostedArticleAdapter(List<ModelClass> articleList, Context articleContext) {
+    public PostUnpostedArticleAdapter(List<ModelClass> articleList, Context articleContext) {
         this.articleList = articleList;
         this.articleContext = articleContext;
     }
 
     @NonNull
     @Override
-    public UnpostedArticleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PostUnpostedArticleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_with_image,parent,false);
 
-        return new UnpostedArticleAdapter.ViewHolder(view);
+        return new PostUnpostedArticleAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UnpostedArticleAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PostUnpostedArticleAdapter.ViewHolder holder, int position) {
         String id = articleList.get(position).getId();
-        reference.child("Article").child(id).addValueEventListener(new ValueEventListener() {
+
+        reference.child("Article").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String title = snapshot.child("title").getValue().toString();
-                String desc = snapshot.child("description").getValue().toString();
+                try {
+                    String title = snapshot.child("title").getValue().toString();
+                    String desc = snapshot.child("description").getValue().toString();
 //                String img = snapshot.child("Article Image").getValue().toString();
 
-                String uid = snapshot.child("authorUid").getValue().toString();
+                    String uid = snapshot.child("authorUid").getValue().toString();
 
-                DatabaseReference ref = database.getReference();
-                DatabaseReference ref1 = database.getReference();
-                ref1.child("UserType").child(uid).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String roleOfUser = snapshot.getValue().toString();
-                        ref.child(roleOfUser).child(uid).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                String author = snapshot.child("name").getValue().toString();
-                                holder.authorName.setText(author);
-                            }
+                    DatabaseReference ref = database.getReference();
+                    DatabaseReference ref1 = database.getReference();
+                    ref1.child("UserType").child(uid).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String roleOfUser = snapshot.getValue().toString();
+                            ref.child(roleOfUser).child(uid).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    String author = snapshot.child("name").getValue().toString();
+                                    holder.authorName.setText(author);
+                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
-                    }
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
-                holder.articelTitle.setText(title);
-                holder.articleDesc.setText(desc);
+                        }
+                    });
+                    holder.articelTitle.setText(title);
+                    holder.articleDesc.setText(desc);
 
 
-                holder.articleImageCard.setVisibility(View.GONE);
+                    holder.articleImageCard.setVisibility(View.GONE);
+                }
+                catch (Exception e)
+                {
+                    System.out.println("");
+                }
 
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -110,6 +118,7 @@ public class UnpostedArticleAdapter extends RecyclerView.Adapter<UnpostedArticle
 
     @Override
     public int getItemCount() {
+
         return articleList.size();
     }
 

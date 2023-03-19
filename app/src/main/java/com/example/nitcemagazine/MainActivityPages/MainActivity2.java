@@ -17,13 +17,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.nitcemagazine.AddEditor;
-import com.example.nitcemagazine.AddReviewer;
+import com.example.nitcemagazine.AddReviewerAndEditor.AddEditor;
+import com.example.nitcemagazine.AddReviewerAndEditor.AddReviewer;
 import com.example.nitcemagazine.LoginAndSignUp.LoginActivity;
 import com.example.nitcemagazine.PostArticle.AddPostFragement;
 import com.example.nitcemagazine.R;
 import com.example.nitcemagazine.LoginAndSignUp.SignUpPage;
-import com.example.nitcemagazine.UnpostedArticles;
+import com.example.nitcemagazine.PostUnpostedArticle.PostUnpostedArticles;
+import com.example.nitcemagazine.ReviewUnpostedArticle.ReviewUnpostedArticles;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -129,10 +130,10 @@ public class MainActivity2 extends AppCompatActivity {
                     startActivity(intent);
                     finishAffinity();
                 } else if (id == R.id.postArticleNavDrawer) {
-                    Intent intent = new Intent(MainActivity2.this, UnpostedArticles.class);
+                    Intent intent = new Intent(MainActivity2.this, PostUnpostedArticles.class);
                     startActivity(intent);
                 } else if (id == R.id.reviewArticleNavDrawer) {
-                    Intent intent = new Intent(MainActivity2.this, UnpostedArticles.class);
+                    Intent intent = new Intent(MainActivity2.this, ReviewUnpostedArticles.class);
                     startActivity(intent);
                 }
 

@@ -1,4 +1,4 @@
-package com.example.nitcemagazine;
+package com.example.nitcemagazine.PostUnpostedArticle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +11,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nitcemagazine.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -63,21 +64,28 @@ public class EditorPage extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //get Values from database
-                imageUrl = snapshot.child("ArticleImage").getValue(String.class);
-                prevRating=Float.parseFloat(snapshot.child("Rating").getValue().toString());
-                String content = snapshot.child("description").getValue(String.class);
-                String title = snapshot.child("title").getValue(String.class);
-                author=snapshot.child("authorUid").getValue(String.class);
-                reviewCount =Integer.parseInt(snapshot.child("reviewCount").getValue().toString());
-                category=snapshot.child("Category").getValue(String.class);
+                try{
+                    imageUrl = snapshot.child("ArticleImage").getValue(String.class);
+                    prevRating = Float.parseFloat(snapshot.child("Rating").getValue().toString());
+                    String content = snapshot.child("description").getValue(String.class);
+                    String title = snapshot.child("title").getValue(String.class);
+                    author = snapshot.child("authorUid").getValue(String.class);
+                    reviewCount = Integer.parseInt(snapshot.child("reviewCount").getValue().toString());
+                    category = snapshot.child("category").getValue().toString();
 
-                //set Values into Views
-                Picasso.get().load(imageUrl).into(articleImage);
-                articletitle.setText(title);
-                description.setText(content);
-                ratingBar.setRating(prevRating);
-                String summ=reviewCount+"/5 reviewed by "+reviewCount+" reviewers";
-                ratingSummary.setText(summ);
+                    //set Values into Views
+                    Picasso.get().load(imageUrl).into(articleImage);
+                    articletitle.setText(title);
+                    description.setText(content);
+                    ratingBar.setRating(prevRating);
+                    ratingBar.setEnabled(false);
+                    String sum = prevRating + "/5 reviewed by " + reviewCount + " reviewers";
+                    ratingSummary.setText(sum);
+                }
+                catch (Exception E)
+                {
+                    System.out.println();
+                }
             }
 
             @Override
@@ -101,7 +109,7 @@ public class EditorPage extends AppCompatActivity {
                 map.put("description",description.getText());
                 map.put("ArticleImage",imageUrl);
                 map.put("authorUid",author);
-                map.put("Category",category);
+                map.put("category",category);
                 map.put("Rating",prevRating);
                 map.put("reviewCount",reviewCount);
 

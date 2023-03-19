@@ -1,6 +1,4 @@
-package com.example.nitcemagazine;
-
-import static java.security.AccessController.getContext;
+package com.example.nitcemagazine.ReviewUnpostedArticle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
-import com.example.nitcemagazine.FragmentAdapters.EducationalAdapter;
 import com.example.nitcemagazine.FragmentAdapters.ModelClass;
+import com.example.nitcemagazine.PostUnpostedArticle.PostUnpostedArticleAdapter;
+import com.example.nitcemagazine.PostUnpostedArticle.PostUnpostedArticles;
+import com.example.nitcemagazine.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -23,10 +23,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnpostedArticles extends AppCompatActivity {
+public class ReviewUnpostedArticles extends AppCompatActivity {
 
     RecyclerView unpostedArticle;
-    UnpostedArticleAdapter unpostedArticleAdapter;
+    ReviewUnpostedArticleAdapter reviewUnpostedArticleAdapter;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = auth.getCurrentUser();
     List<ModelClass> articleList;
@@ -37,9 +37,9 @@ public class UnpostedArticles extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_unposted_articles);
+        setContentView(R.layout.activity_review_unposted_articles);
 
-        unpostedArticle = findViewById(R.id.recyclerViewUnpostedArticle);
+        unpostedArticle = findViewById(R.id.recyclerViewReviewUnpostedArticle);
 
         unpostedArticle.setLayoutManager(new LinearLayoutManager(this));
 
@@ -56,7 +56,7 @@ public class UnpostedArticles extends AppCompatActivity {
                 modelClass = snapshot.getValue(ModelClass.class);
                 articleList.add(modelClass);
                 modelClass.setId(snapshot.getKey());
-                unpostedArticleAdapter.notifyDataSetChanged();
+                reviewUnpostedArticleAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -79,8 +79,8 @@ public class UnpostedArticles extends AppCompatActivity {
 
             }
         });
-        unpostedArticleAdapter = new UnpostedArticleAdapter(articleList, UnpostedArticles.this);
-        unpostedArticle.setAdapter(unpostedArticleAdapter);
+        reviewUnpostedArticleAdapter= new ReviewUnpostedArticleAdapter(articleList, ReviewUnpostedArticles.this);
+        unpostedArticle.setAdapter(reviewUnpostedArticleAdapter);
     }
 
 
