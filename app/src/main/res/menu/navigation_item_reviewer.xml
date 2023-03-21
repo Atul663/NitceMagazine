@@ -19,6 +19,7 @@
     <item
         android:id="@+id/reviewArticleNavDrawer"
         android:title="Review Article"
+        android:icon="@drawable/baseline_analytics_24"
         />
 
 

@@ -27,7 +27,7 @@
     <item
         android:id="@+id/removeReviewerNavDrawer"
         android:title="Remove Reviewer"
-        android:icon="@drawable/baseline_logout_24"/>
+        android:icon="@drawable/baseline_delete_24"/>
 
     <item
         android:id="@+id/logoutNavDrawer"

@@ -24,7 +24,7 @@
     <item
         android:id="@+id/deleteArticleNavDrawer"
         android:title="Delete Article"
-        android:icon="@drawable/baseline_send_24"/>
+        android:icon="@drawable/baseline_delete_24"/>
 
 
     <item
