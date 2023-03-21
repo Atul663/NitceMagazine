@@ -25,23 +25,23 @@ import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AddReviewer extends AppCompatActivity {
+public class DeleteReviewer extends AppCompatActivity {
 
     EditText student_id;
     Button addReviewer,getUser;
     CircleImageView pic;
     TextView nameTest,roleTest;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-//    DatabaseReference dbreference = database.getReference();
+    //    DatabaseReference dbreference = database.getReference();
     DatabaseReference studentRef;
     ConstraintLayout cl;
     ArrayList<String > stdList = new ArrayList<>();
     ArrayList<String> stdRole = new ArrayList<>();
+    ArrayList<String > currentEditor = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_editor_reviewer);
-
+        setContentView(R.layout.activity_delete_reviewer);
         getUser = findViewById(R.id.get_user);
         addReviewer=(Button) findViewById(R.id.buttom_add_editor);
         student_id=(EditText) findViewById(R.id.input_Email_add_editor);
@@ -135,10 +135,13 @@ public class AddReviewer extends AppCompatActivity {
 
                 if(stdRole.get(0).equalsIgnoreCase("student"))
                 {
-                    Toast.makeText(AddReviewer.this, "Student", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DeleteReviewer.this, "Not a Reviewer", Toast.LENGTH_SHORT).show();
+
+                } else if (stdRole.get(0).equalsIgnoreCase("Reviewer")) {
+
                     DatabaseReference ref = database.getReference();
 
-                    ref.child("Student").child(stdList.get(0)).addValueEventListener(new ValueEventListener() {
+                    ref.child("Reviewer").child(stdList.get(0)).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             try {
@@ -150,19 +153,19 @@ public class AddReviewer extends AppCompatActivity {
                                 mp.put("name", name);
                                 mp.put("profilePictures", profilePictures);
                                 mp.put("email", email);
-                                mp.put("role", "Reviewer");
+                                mp.put("role", "Student");
 
                                 DatabaseReference ref1 = database.getReference();
 
 
-                                ref1.child("Reviewer").child(stdList.get(0)).setValue(mp).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                ref1.child("Student").child(stdList.get(0)).setValue(mp).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
                                         DatabaseReference ref2 = database.getReference();
-                                        ref2.child("UserType").child(stdList.get(0)).setValue("Reviewer").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        ref2.child("UserType").child(stdList.get(0)).setValue("Student").addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
-                                                ref2.child("Student").child(stdList.get(0)).removeValue();
+                                                ref2.child("Reviewer").child(stdList.get(0)).removeValue();
                                             }
                                         });
                                     }
@@ -181,28 +184,16 @@ public class AddReviewer extends AppCompatActivity {
                         }
                     });
 
-                } else if (stdRole.get(0).equalsIgnoreCase("Reviewer")) {
-                    Toast.makeText(AddReviewer.this, "Already a reviewer", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DeleteReviewer.this, "Removed a reviewer", Toast.LENGTH_SHORT).show();
                 }
                 else if (stdRole.get(0).equalsIgnoreCase("Editor")) {
-                    Toast.makeText(AddReviewer.this, "Already a Editor", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DeleteReviewer.this, "Already a Editor", Toast.LENGTH_SHORT).show();
                 }
                 else if (stdRole.get(0).equalsIgnoreCase("Admin")) {
-                    Toast.makeText(AddReviewer.this, "Already a Admin", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DeleteReviewer.this, "Already a Admin", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
     }
-
-    public String role()
-    {
-        return stdRole.get(0);
-    }
-
-    public String uid()
-    {
-        return stdList.get(0);
-    }
-
 }

@@ -21,6 +21,11 @@
         android:title="Post Article"
         android:icon="@drawable/baseline_send_24"/>
 
+    <item
+        android:id="@+id/deleteArticleNavDrawer"
+        android:title="Delete Article"
+        android:icon="@drawable/baseline_send_24"/>
+
 
     <item
         android:id="@+id/logoutNavDrawer"
