@@ -53,7 +53,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profilePictureSignUp" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewImageSelect" />
 
     <EditText
         android:id="@+id/input_Email_Reg"
@@ -184,13 +184,24 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profilePictureSignUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginTop="9dp"
-        android:src="@drawable/ic_launcher_foreground"
+        android:src="@drawable/img_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/NITCeMagzine"
         tools:srcCompat="@tools:sample/avatars" />
+    <TextView
+        android:id="@+id/textViewImageSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Select Image"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilePictureSignUp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

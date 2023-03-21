@@ -64,7 +64,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                         }
                         else
                         {
-                            Picasso.get().load(R.drawable.baseline_account_circle_24).into(holder.commentUserImage);
+//                            Picasso.get().load(R.drawable.baseline_account_circle_24).into(holder.commentUserImage);
+                            holder.commentUserImage.setImageResource(R.drawable.baseline_account_circle_24);
                         }
 
                     }
