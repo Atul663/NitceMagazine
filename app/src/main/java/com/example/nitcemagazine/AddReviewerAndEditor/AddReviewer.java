@@ -2,31 +2,44 @@ package com.example.nitcemagazine.AddReviewerAndEditor;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nitcemagazine.MainActivityPages.MainFragment;
+import com.example.nitcemagazine.PostArticle.AddPostFragement;
 import com.example.nitcemagazine.R;
+import com.example.nitcemagazine.userFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddReviewer extends AppCompatActivity {
 
     EditText student_id;
     Button addReviewer,getUser;
+    CircleImageView pic;
+    TextView nameTest,roleTest;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
 //    DatabaseReference dbreference = database.getReference();
     DatabaseReference studentRef;
+    ConstraintLayout cl;
     ArrayList<String > stdList = new ArrayList<>();
     ArrayList<String> stdRole = new ArrayList<>();
     @Override
@@ -37,6 +50,12 @@ public class AddReviewer extends AppCompatActivity {
         getUser = findViewById(R.id.get_user);
         addReviewer=(Button) findViewById(R.id.buttom_add_editor);
         student_id=(EditText) findViewById(R.id.input_Email_add_editor);
+        nameTest = findViewById(R.id.textView5);
+        roleTest = findViewById(R.id.textView6);
+        pic = findViewById(R.id.circleImageView);
+        cl = findViewById(R.id.frmelayout_user_details);
+
+        cl.setVisibility(View.INVISIBLE);
 
         getUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,13 +82,38 @@ public class AddReviewer extends AppCompatActivity {
                                             if (!stdList.contains(ds.getKey())) {
                                                 stdList.add(ds.getKey());
                                                 stdRole.add(ds.getValue().toString());
+
+                                                cl.setVisibility(View.VISIBLE);
+
+                                                nameTest.setText(snapshot.child("name").getValue().toString());
+                                                roleTest.setText(roleOfUser);
+                                                String img = snapshot.child("profilePictures").getValue().toString();
+                                                if (!img.equalsIgnoreCase("null")) {
+                                                    Picasso.get().load(img).into(pic);
+                                                }
+                                                else
+                                                {
+                                                    pic.setImageResource(R.drawable.baseline_account_circle_24);
+//                                                    Picasso.get().load(R.drawable.baseline_account_circle_24).into(pic);
+                                                }
+
+
+//                                                FragmentManager fm = getSupportFragmentManager();
+//                                                FragmentTransaction ft = fm.beginTransaction();
+//                                                ft.add(R.id.frmelayout_user_details, new userFragment());
+//                                                ft.commit();
+
+//                                                FragmentManager fm = getSupportFragmentManager();
+//                                                FragmentTransaction ft = fm.beginTransaction();
+//                                                ft.add(R.id.frmelayout_user_details, new userFragment());
+//                                                ft.commit();
                                             }
 
                                         }
                                     }
                                     catch (Exception e)
                                     {
-                                        System.out.println();
+                                        System.out.println(e);
                                     }
                                 }
 
@@ -155,4 +199,15 @@ public class AddReviewer extends AppCompatActivity {
             }
         });
     }
+
+    public String role()
+    {
+        return stdRole.get(0);
+    }
+
+    public String uid()
+    {
+        return stdList.get(0);
+    }
+
 }

@@ -109,13 +109,11 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frmelayout_user_details"
-            android:layout_width="328dp"
-            android:layout_height="251dp"
-            android:layout_marginStart="32dp"
+            android:layout_width="319dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
             android:layout_marginBottom="100dp"
             android:padding="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -123,24 +121,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/user_details"
-                android:layout_width="214dp"
-                android:layout_height="58dp"
-                android:layout_marginBottom="250dp"
-                android:gravity="center"
-                android:text="User Details"
-                android:textColor="@color/black"
-                android:textColorLink="#D60404"
-                android:textSize="34sp"
-                android:textStyle="normal"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circleImageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="66dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/arrows_10_generated"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </FrameLayout>
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="57dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/hello_blank_fragment"
+                app:layout_constraintBottom_toTopOf="@+id/textView6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/circleImageView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textView5"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <Button
             android:id="@+id/buttom_add_editor"
