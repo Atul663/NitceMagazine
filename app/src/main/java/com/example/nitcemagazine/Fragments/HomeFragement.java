@@ -40,6 +40,7 @@ public class HomeFragement extends Fragment {
         View view = inflater.inflate(R.layout.home_fragement,null);
 
         recyclerView = view.findViewById(R.id.recyclerViewHome);
+        recyclerView.setBackgroundColor(0xDDDDDD);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
