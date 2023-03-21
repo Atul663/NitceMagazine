@@ -67,7 +67,7 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginBottom="117dp"
-        android:background="@drawable/get_started_button"
+        android:background="@drawable/button_background"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
