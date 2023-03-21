@@ -31,9 +31,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="19dp"
-                android:maxHeight="300dp"
                 android:minHeight="300dp"
-                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@+id/TitleArticleView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -106,12 +104,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/commentArticleView" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonAddCommentArticleView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="9dp"
                 android:text="Add"
+                android:background="@drawable/button_background"
                 app:layout_constraintBaseline_toBaselineOf="@+id/commentArticleView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/commentArticleView" />
