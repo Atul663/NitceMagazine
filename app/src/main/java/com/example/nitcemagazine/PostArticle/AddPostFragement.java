@@ -122,6 +122,7 @@ public class AddPostFragement extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String atitle=title.getText().toString();
                 String desc=description.getText().toString();
 
