@@ -8,24 +8,22 @@
 
     <item
         android:id="@+id/signUpNavDrawer"
-        android:title="Sign Up"/>
+        android:title="Sign Up"
+        android:icon="@drawable/baseline_app_registration_24"/>
 
     <item
         android:id="@+id/addPostNavDrawer"
         android:title="Add Post"
-        android:icon="@drawable/baseline_add_24"/>
-
-    <item
-        android:id="@+id/addEditorNavDrawer"
-        android:title="Add Editor"
-        android:icon="@drawable/baseline_add_24"/>
+        android:icon="@drawable/baseline_post_add_24"/>
 
     <item
         android:id="@+id/postArticleNavDrawer"
-        android:title="Post Article"/>
+        android:title="Post Article"
+        android:icon="@drawable/baseline_send_24"/>
 
 
     <item
         android:id="@+id/logoutNavDrawer"
-        android:title="Logout"/>
+        android:title="Logout"
+        android:icon="@drawable/baseline_logout_24"/>
 </menu>

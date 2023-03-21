@@ -1,10 +1,14 @@
 package com.example.nitcemagazine.PostUnpostedArticle;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -65,7 +69,7 @@ public class EditorPage extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //get Values from database
                 try{
-                    imageUrl = snapshot.child("ArticleImage").getValue(String.class);
+                    imageUrl = snapshot.child("ArticleImage").getValue().toString();
                     prevRating = Float.parseFloat(snapshot.child("Rating").getValue().toString());
                     String content = snapshot.child("description").getValue(String.class);
                     String title = snapshot.child("title").getValue(String.class);
@@ -74,12 +78,23 @@ public class EditorPage extends AppCompatActivity {
                     category = snapshot.child("category").getValue().toString();
 
                     //set Values into Views
-                    Picasso.get().load(imageUrl).into(articleImage);
+                    //if(imageUrl !=null)
+                    //Toast.makeText(EditorPage.this, imageUrl.length(), Toast.LENGTH_SHORT).show();
+                    if(imageUrl.equals("null")){
+                        articleImage.setMinimumHeight(0);
+                        articleImage.setLayoutParams(new ViewGroup.LayoutParams(0,0));
+                    }
+                    else {
+                        Picasso.get().load(imageUrl).into(articleImage);
+                    }
+
+
                     articletitle.setText(title);
                     description.setText(content);
                     ratingBar.setRating(prevRating);
                     ratingBar.setEnabled(false);
-                    String sum = prevRating + "/5 reviewed by " + reviewCount + " reviewers";
+                    double r=Math.round(prevRating*10.0)/10.0;
+                    String sum = r + "/5 reviewed by " + reviewCount + " reviewers";
                     ratingSummary.setText(sum);
                 }
                 catch (Exception E)

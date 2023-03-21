@@ -58,12 +58,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                         holder.commentUserName.setText(snapshot.child("name").getValue().toString());
                         String img = snapshot.child("profilePictures").getValue().toString();
 
+
                         if (!img.equalsIgnoreCase("null")) {
                             Picasso.get().load(img).into(holder.commentUserImage);
                         }
                         else
                         {
-                            Picasso.get().load(R.drawable.baseline_add_24).into(holder.commentUserImage);
+                            Picasso.get().load(R.drawable.baseline_account_circle_24).into(holder.commentUserImage);
                         }
 
                     }
