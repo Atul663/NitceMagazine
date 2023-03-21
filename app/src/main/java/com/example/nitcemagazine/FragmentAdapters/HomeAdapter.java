@@ -58,6 +58,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                     String title = snapshot.child("title").getValue().toString();
                     String desc = snapshot.child("description").getValue().toString();
                     String img = snapshot.child("ArticleImage").getValue().toString();
+                    String rate= Math.round(Double.parseDouble(snapshot.child("Rating").getValue().toString())*10.0)/10.0+"/5";
+
                     String uid = snapshot.child("authorUid").getValue().toString();
 
                     DatabaseReference ref = database.getReference();
@@ -88,6 +90,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
                     holder.articelTitle.setText(title);
                     holder.articleDesc.setText(desc);
+                    holder.rating.setText(rate);
 
                     if(!img.equalsIgnoreCase("null"))
                     {
@@ -136,7 +139,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        TextView articelTitle,articleDesc,authorName;
+        TextView articelTitle,articleDesc,authorName,rating;
         ImageView articleImageCard;
         CardView articleCardView;
 
@@ -148,7 +151,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             articleImageCard = itemView.findViewById(R.id.imageViewArticleImageCard);
             authorName = itemView.findViewById(R.id.textViewAuthorNameCard);
             articleCardView = itemView.findViewById(R.id.articleCardView);
-
+            rating=itemView.findViewById(R.id.textViewRating);
         }
     }
 

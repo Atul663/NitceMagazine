@@ -32,7 +32,7 @@
                 android:id="@+id/navigationDrawerIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/baseline_drag_handle_24" />
+                android:src="@drawable/baseline_menu_24" />
 
 
             <TextView
