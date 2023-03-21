@@ -72,8 +72,10 @@ public class SignUpPage extends AppCompatActivity {
             public void onClick(View view) {
                 String userEmailId = username.getText().toString();
                 String userPassword = password.getText().toString();
+                String confirmPasswordUser = confirmPassword.getText().toString();
+                String nameUser = name.getText().toString();
 
-                if(userEmailId.isEmpty() && userPassword.isEmpty())
+                if(userEmailId.isEmpty() && userPassword.isEmpty() && confirmPasswordUser.isEmpty() && nameUser.isEmpty())
                 {
                     Toast.makeText(SignUpPage.this, "Please enter the Email id and Password", Toast.LENGTH_SHORT).show();
                 }
@@ -85,12 +87,21 @@ public class SignUpPage extends AppCompatActivity {
                 else if(userPassword.isEmpty())
                 {
                     Toast.makeText(SignUpPage.this, "Please enter a password", Toast.LENGTH_SHORT).show();
-                }
-                else if(Patterns.EMAIL_ADDRESS.matcher(userEmailId).matches())
+                } else if (confirmPasswordUser.isEmpty()) {
+                    Toast.makeText(SignUpPage.this, "Please enter a password", Toast.LENGTH_SHORT).show();
+
+                } else if (nameUser.isEmpty()) {
+                    Toast.makeText(SignUpPage.this, "Please enter a password", Toast.LENGTH_SHORT).show();
+
+                } else if (!confirmPasswordUser.equals(userPassword)) {
+                    Toast.makeText(SignUpPage.this, "Please enter a password", Toast.LENGTH_SHORT).show();
+
+                } else if(Patterns.EMAIL_ADDRESS.matcher(userEmailId).matches())
                 {
                     boolean check = checkNitcEmail(userEmailId);
-                    if(check)
+                    if(check) {
                         signUpFirebase(userEmailId, userPassword);
+                    }
                     else
                         Toast.makeText(SignUpPage.this, "Enter NITC email id", Toast.LENGTH_SHORT).show();
 

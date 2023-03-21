@@ -47,8 +47,10 @@ public class FestAdapter extends RecyclerView.Adapter<FestAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        try {
 
-        String id = articleList.get(position).getId();
+
+            String id = articleList.get(position).getId();
 
             reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -65,7 +67,7 @@ public class FestAdapter extends RecyclerView.Adapter<FestAdapter.ViewHolder> {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             String roleOfUser = snapshot.getValue().toString();
-                            ref.child(roleOfUser).child(uid).addValueEventListener(new ValueEventListener() {
+                            ref.child(roleOfUser).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     String author = snapshot.child("name").getValue().toString();
@@ -116,6 +118,10 @@ public class FestAdapter extends RecyclerView.Adapter<FestAdapter.ViewHolder> {
                 articleContext.startActivity(intent);
             }
         });
+        }catch (Exception e)
+        {
+            System.out.println();
+        }
     }
 
     @Override

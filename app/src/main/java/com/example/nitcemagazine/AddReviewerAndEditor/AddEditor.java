@@ -28,6 +28,7 @@ public class AddEditor extends AppCompatActivity {
     DatabaseReference studentRef;
     ArrayList<String > stdList = new ArrayList<>();
     ArrayList<String> stdRole = new ArrayList<>();
+    ArrayList<String > currentEditor = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +51,17 @@ public class AddEditor extends AppCompatActivity {
                         for (DataSnapshot ds : snapshot.getChildren())
                         {
                             String roleOfUser = ds.getValue().toString();
+                            String id = ds.getKey();
 
-                            ref1.child(roleOfUser).child(ds.getKey()).addValueEventListener(new ValueEventListener() {
+                            if(roleOfUser.equalsIgnoreCase("editor"))
+                            {
+                                if(!currentEditor.contains(id))
+                                {
+                                    currentEditor.add(id);
+                                }
+                            }
+
+                            ref1.child(roleOfUser).child(id).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     System.out.println(roleOfUser);
@@ -59,10 +69,12 @@ public class AddEditor extends AppCompatActivity {
                                         if (snapshot.child("email").getValue().toString().equalsIgnoreCase(student_email)) {
                                             if (!stdList.contains(ds.getKey())) {
                                                 stdList.add(ds.getKey());
-                                                stdRole.add(ds.getValue().toString());
+                                                stdRole.add(roleOfUser);
                                             }
 
                                         }
+
+
                                     }
                                     catch (Exception e)
                                     {
@@ -97,6 +109,53 @@ public class AddEditor extends AppCompatActivity {
                 {
                     Toast.makeText(AddEditor.this, "Successfully added a Editor", Toast.LENGTH_SHORT).show();
                     DatabaseReference ref = database.getReference();
+
+                    if(currentEditor.size() == 1)
+                    {
+
+                        ref.child("Editor").child(currentEditor.get(0)).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                try {
+                                    String email = snapshot.child("email").getValue().toString();
+                                    String name = snapshot.child("name").getValue().toString();
+                                    String profilePictures = snapshot.child("profilePictures").getValue().toString();
+
+                                    HashMap<String, String> mp = new HashMap<>();
+                                    mp.put("name", name);
+                                    mp.put("profilePictures", profilePictures);
+                                    mp.put("email", email);
+                                    mp.put("role", "Student");
+
+                                    DatabaseReference ref1 = database.getReference();
+
+
+                                    ref1.child("Student").child(currentEditor.get(0)).setValue(mp).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            DatabaseReference ref2 = database.getReference();
+                                            ref2.child("UserType").child(currentEditor.get(0)).setValue("Student").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    ref2.child("Editor").child(currentEditor.get(0)).removeValue();
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                                catch (Exception e)
+                                {
+                                    System.out.println();
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
 
                     ref.child("Student").child(stdList.get(0)).addValueEventListener(new ValueEventListener() {
                         @Override

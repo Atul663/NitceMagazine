@@ -1,6 +1,9 @@
-package com.example.nitcemagazine.FragmentAdapters;
+package com.example.nitcemagazine;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,59 +15,60 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.nitcemagazine.R;
-import com.example.nitcemagazine.Fragments.ViewArticle;
+import com.example.nitcemagazine.FragmentAdapters.ModelClass;
+import com.example.nitcemagazine.MainActivityPages.MainActivity2;
+import com.example.nitcemagazine.PostUnpostedArticle.EditorPage;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder> {
+public class DeleteArticleAdapter extends RecyclerView.Adapter<DeleteArticleAdapter.ViewHolder>{
 
     List<ModelClass> articleList;
     Context articleContext;
+    List<String > reviewCount;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
 
-    public SportAdapter(List<ModelClass> articleList,Context articleContext) {
+    public DeleteArticleAdapter(List<ModelClass> articleList, Context articleContext) {
         this.articleList = articleList;
         this.articleContext = articleContext;
     }
 
-
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DeleteArticleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_with_image,parent,false);
-        return new ViewHolder(view);
+
+        return new DeleteArticleAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        try {
-
+    public void onBindViewHolder(@NonNull DeleteArticleAdapter.ViewHolder holder, int position) {
         String id = articleList.get(position).getId();
-        reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
+
+        reference.child("PostedArticle").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String title = snapshot.child("title").getValue().toString();
-                String desc = snapshot.child("description").getValue().toString();
-                String img = snapshot.child("ArticleImage").getValue().toString();
+                try {
+                    String title = snapshot.child("title").getValue().toString();
+                    String desc = snapshot.child("description").getValue().toString();
+//                String img = snapshot.child("Article Image").getValue().toString();
 
-                String uid = snapshot.child("authorUid").getValue().toString();
+                    String uid = snapshot.child("authorUid").getValue().toString();
 
-                DatabaseReference ref = database.getReference();
-                DatabaseReference ref1 = database.getReference();
-                    ref1.child("UserType").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    DatabaseReference ref = database.getReference();
+                    DatabaseReference ref1 = database.getReference();
+                    ref1.child("UserType").child(uid).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             String roleOfUser = snapshot.getValue().toString();
-                            ref.child(roleOfUser).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                            ref.child(roleOfUser).child(uid).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     String author = snapshot.child("name").getValue().toString();
@@ -83,21 +87,19 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder> 
 
                         }
                     });
+                    holder.articelTitle.setText(title);
+                    holder.articleDesc.setText(desc);
 
 
-                holder.articelTitle.setText(title);
-                holder.articleDesc.setText(desc);
-
-                if(!img.equalsIgnoreCase("null"))
-                {
-                    Picasso.get().load(img).into(holder.articleImageCard);
-                }
-                else
-                {
                     holder.articleImageCard.setVisibility(View.GONE);
+                }
+                catch (Exception e)
+                {
+                    System.out.println("");
                 }
 
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -108,37 +110,51 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder> 
         holder.articleCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(articleContext, ViewArticle.class);
+                Intent intent = new Intent(articleContext, EditorPage.class);
                 intent.putExtra("ArticleIdIntent",id);
                 articleContext.startActivity(intent);
             }
         });
 
+        holder.articleCardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
 
-        }catch (Exception e)
-        {
-            System.out.println();
-        }
+                new AlertDialog.Builder(articleContext)
+                        .setTitle("Are you sure")
+                        .setMessage("Do you want to delete this article")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                reference.child("PostedArticle").child(id).removeValue();
+                                Intent intent = new Intent(articleContext, MainActivity2.class);
+                                articleContext.startActivity(intent);
+                                ((Activity)articleContext).finish();
+                            }
+                        }).setNegativeButton("No",null)
+                        .show();
+
+
+                return true;
+            }
+        });
+
+
+
     }
 
     @Override
     public int getItemCount() {
-        int count = 0;
-        for (int i = 0; i < articleList.size(); i++)
-        {
-            if(articleList.get(i).getCategory().equalsIgnoreCase("sport"))
-            {
-                count++;
-            }
-        }
-        return count;
+
+        return articleList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
-    {
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
         TextView articelTitle,articleDesc,authorName;
         ImageView articleImageCard;
         CardView articleCardView;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -151,5 +167,5 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder> 
 
         }
     }
-
 }
+

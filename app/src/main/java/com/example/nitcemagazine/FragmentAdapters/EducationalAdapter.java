@@ -58,8 +58,9 @@ public class EducationalAdapter extends RecyclerView.Adapter<EducationalAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        try {
 
-        String id = articleList.get(position).getId();
+            String id = articleList.get(position).getId();
             reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -75,7 +76,7 @@ public class EducationalAdapter extends RecyclerView.Adapter<EducationalAdapter.
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             String roleOfUser = snapshot.getValue().toString();
-                            ref.child(roleOfUser).child(uid).addValueEventListener(new ValueEventListener() {
+                            ref.child(roleOfUser).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     String author = snapshot.child("name").getValue().toString();
@@ -124,7 +125,10 @@ public class EducationalAdapter extends RecyclerView.Adapter<EducationalAdapter.
         });
 
 
-
+        }catch (Exception e)
+        {
+            System.out.println();
+        }
 
     }
 

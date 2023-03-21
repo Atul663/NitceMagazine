@@ -47,7 +47,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        System.out.println(articleList.get(position).getId());
+        try {
+
+            System.out.println(articleList.get(position).getId());
         String id = articleList.get(position).getId();
         System.out.println(articleList.get(position).getImg());
             reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
@@ -60,7 +62,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
                     DatabaseReference ref = database.getReference();
                     DatabaseReference ref1 = database.getReference();
-                    ref1.child("UserType").child(uid).addValueEventListener(new ValueEventListener() {
+                    ref1.child("UserType").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             String roleOfUser = snapshot.getValue().toString();
@@ -113,7 +115,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                 }
             });
 
-
+        }catch (Exception e)
+        {
+            System.out.println();
+        }
     }
 
     @Override

@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.nitcemagazine.AddReviewerAndEditor.AddEditor;
 import com.example.nitcemagazine.AddReviewerAndEditor.AddReviewer;
+import com.example.nitcemagazine.DeleteArticle;
 import com.example.nitcemagazine.LoginAndSignUp.LoginActivity;
 import com.example.nitcemagazine.PostArticle.AddPostFragement;
 import com.example.nitcemagazine.R;
@@ -130,7 +131,7 @@ public class MainActivity2 extends AppCompatActivity {
                     startActivity(intent);
                     finishAffinity();
                 } else if (id == R.id.postArticleNavDrawer) {
-                    Intent intent = new Intent(MainActivity2.this, PostUnpostedArticles.class);
+                    Intent intent = new Intent(MainActivity2.this, DeleteArticle.class);
                     startActivity(intent);
                 } else if (id == R.id.reviewArticleNavDrawer) {
                     Intent intent = new Intent(MainActivity2.this, ReviewUnpostedArticles.class);

@@ -1,6 +1,7 @@
 
 package com.example.nitcemagazine.MainActivityPages;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.nitcemagazine.LoginAndSignUp.LoginActivity;
 import com.example.nitcemagazine.PostArticle.AddPostFragement;
 import com.example.nitcemagazine.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,7 +31,14 @@ import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainFragment extends Fragment {
 
@@ -46,6 +55,8 @@ public class MainFragment extends Fragment {
 
     FirebaseAuth auth;
     FirebaseUser user;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference reference = database.getReference();
 
     public MainFragment() {}
 
@@ -157,31 +168,57 @@ public class MainFragment extends Fragment {
         auth.signInWithEmailAndPassword(userEmailId,userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful())
-                {
-                    if(auth.getCurrentUser().isEmailVerified())
-                    {
-                        dialog.dismiss();
-                        Toast.makeText(getActivity(), "Sign in successful", Toast.LENGTH_SHORT).show();
-                        FragmentManager fm = getParentFragmentManager();
-                        FragmentTransaction ft = fm.beginTransaction();
-                        ft.replace(R.id.content, new AddPostFragement());
-                        ft.commit();
-//                        Intent intent = new Intent(getActivity(), AddPost.class);
-//                        startActivity(intent);
-////                        finish();
-                    }
-                    else {
-                        auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(getActivity(), "Please verify your email.", Toast.LENGTH_SHORT).show();
+                if(task.isSuccessful()) {
+                    FirebaseUser user = auth.getCurrentUser();
+                    reference.child("UserType").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String role = snapshot.getValue().toString();
+                            if(role.equalsIgnoreCase("Admin"))
+                            {
+                                Toast.makeText(getActivity(), "Sign in successful", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getActivity(), MainActivity2.class);
+                                startActivity(intent);
                             }
-                        });
-                    }
-                }
-            }
+                            else if(auth.getCurrentUser().isEmailVerified())
+                            {
+                                Toast.makeText(getActivity(), "Sign in successful", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getActivity(), MainActivity2.class);
+                                startActivity(intent);
+                            }
+                            else {
+                                auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
 
+                                        Toast.makeText(getActivity(), "Please verify your email.", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+
+                else
+                {
+                    if(task.getException() instanceof FirebaseAuthInvalidUserException)
+                    {
+                        Toast.makeText(getActivity(), "Invalid User", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(task.getException() instanceof FirebaseAuthInvalidCredentialsException)
+                    {
+                        Toast.makeText(getActivity(), "Password is wrong", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+            }
         });
     }
 }

@@ -47,71 +47,73 @@ public class TechnicalAdapter extends RecyclerView.Adapter<TechnicalAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        try {
 
-        String id = articleList.get(position).getId();
-        reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String title = snapshot.child("title").getValue().toString();
-                String desc = snapshot.child("description").getValue().toString();
-                String img = snapshot.child("ArticleImage").getValue().toString();
+            String id = articleList.get(position).getId();
+            reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String title = snapshot.child("title").getValue().toString();
+                    String desc = snapshot.child("description").getValue().toString();
+                    String img = snapshot.child("ArticleImage").getValue().toString();
 
-                String uid = snapshot.child("authorUid").getValue().toString();
+                    String uid = snapshot.child("authorUid").getValue().toString();
 
-                DatabaseReference ref = database.getReference();
-                DatabaseReference ref1 = database.getReference();
-                ref1.child("UserType").child(uid).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String roleOfUser = snapshot.getValue().toString();
-                        ref.child(roleOfUser).child(uid).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                String author = snapshot.child("name").getValue().toString();
-                                holder.authorName.setText(author);
-                            }
+                    DatabaseReference ref = database.getReference();
+                    DatabaseReference ref1 = database.getReference();
+                    ref1.child("UserType").child(uid).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String roleOfUser = snapshot.getValue().toString();
+                            ref.child(roleOfUser).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    String author = snapshot.child("name").getValue().toString();
+                                    holder.authorName.setText(author);
+                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                    holder.articelTitle.setText(title);
+                    holder.articleDesc.setText(desc);
+
+                    if (!img.equalsIgnoreCase("null")) {
+                        Picasso.get().load(img).into(holder.articleImageCard);
+                    } else {
+                        holder.articleImageCard.setVisibility(View.GONE);
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-                holder.articelTitle.setText(title);
-                holder.articleDesc.setText(desc);
-
-                if(!img.equalsIgnoreCase("null"))
-                {
-                    Picasso.get().load(img).into(holder.articleImageCard);
-                }
-                else
-                {
-                    holder.articleImageCard.setVisibility(View.GONE);
                 }
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
 
-            }
-        });
-
-        holder.articleCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(articleContext, ViewArticle.class);
-                intent.putExtra("ArticleIdIntent",id);
-                articleContext.startActivity(intent);
-            }
-        });
+            holder.articleCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(articleContext, ViewArticle.class);
+                    intent.putExtra("ArticleIdIntent", id);
+                    articleContext.startActivity(intent);
+                }
+            });
+        }catch (Exception e)
+        {
+            System.out.println();
+        }
 
     }
 

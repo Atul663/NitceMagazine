@@ -263,7 +263,6 @@ public class ViewArticle extends AppCompatActivity {
         Toast.makeText(ViewArticle.this, "Pdf downloaded successfully", Toast.LENGTH_SHORT).show();
 
     }
-//
 //    @Override
 //    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 //        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
