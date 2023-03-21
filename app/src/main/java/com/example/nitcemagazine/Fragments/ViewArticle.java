@@ -94,6 +94,8 @@ public class ViewArticle extends AppCompatActivity {
         commentRecyclerView = findViewById(R.id.recyclerViewArticleView);
         downloadButton = findViewById(R.id.downloadButton);
 
+        downloadButton.setVisibility(View.VISIBLE);
+
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         commentList = new ArrayList<>();
