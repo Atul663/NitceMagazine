@@ -245,7 +245,7 @@ public class MainActivity2 extends AppCompatActivity {
         }
 
         else {
-            profileProfilePicture.setImageResource(R.drawable.ic_launcher_background);
+            profileProfilePicture.setImageResource(R.drawable.img_1);
             emailId.setText("");
             role.setText("Guest");
         }
