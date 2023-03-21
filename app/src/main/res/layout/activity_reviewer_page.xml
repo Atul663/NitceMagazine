@@ -59,6 +59,7 @@
             android:numStars="5"
             android:stepSize="1"
             android:contentDescription="rating of article"
+            android:progressTint="#FFCC01"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
