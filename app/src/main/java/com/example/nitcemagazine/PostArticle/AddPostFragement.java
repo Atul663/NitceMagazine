@@ -3,6 +3,7 @@ package com.example.nitcemagazine.PostArticle;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,13 +122,27 @@ public class AddPostFragement extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArticleDetails articleDetails = new ArticleDetails(title.getText().toString(),description.getText().toString(),categorySelected,auth.getCurrentUser().getUid(),filePath);
-                key = reference.child("Article").push().getKey();
-                reference.child("Article").child(key).setValue(articleDetails);
+                String atitle=title.getText().toString();
+                String desc=description.getText().toString();
+
+                if(atitle.isEmpty()){
+                    Toast.makeText(getActivity(), "Enter Title", Toast.LENGTH_SHORT).show();
+                }
+                else if(desc.isEmpty()){
+                    Toast.makeText(getActivity(), "Enter Description", Toast.LENGTH_SHORT).show();
+                }
+                else if(categorySelected.equals("Select Category")){
+                    Toast.makeText(getActivity(), "Select Category", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    ArticleDetails articleDetails = new ArticleDetails(atitle, desc, categorySelected, auth.getCurrentUser().getUid(), filePath);
+                    key = reference.child("Article").push().getKey();
+                    reference.child("Article").child(key).setValue(articleDetails);
 //                setArticleImage();
-                Intent intent = new Intent(getActivity(), MainActivity2.class);
-                startActivity(intent);
-                getActivity().finish();
+                    Intent intent = new Intent(getActivity(), MainActivity2.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
             }
         });
         return view;
@@ -190,9 +205,7 @@ public class AddPostFragement extends Fragment {
                     Toast.makeText(getActivity(), "this fail", Toast.LENGTH_SHORT).show();
                 }
             });
-
         }
-
         else
         {
             reference.child("Article").child(key).child("Article Image").setValue("null");
