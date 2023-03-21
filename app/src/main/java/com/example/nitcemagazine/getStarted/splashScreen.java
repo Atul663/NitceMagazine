@@ -26,6 +26,7 @@ public class splashScreen extends AppCompatActivity {
 
         title = findViewById(R.id.textViewSplash);
         image = findViewById(R.id.imageViewSplash);
+        image.setImageResource(R.drawable.hello);
 
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.splash_anim);
         //image.startAnimation(animation);
