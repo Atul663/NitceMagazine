@@ -224,9 +224,9 @@ public class MainActivity2 extends AppCompatActivity {
                             role.setText(snapshot1.child("role").getValue().toString());
                             String profilePicture = snapshot1.child("profilePictures").getValue().toString();
                             System.out.println(profilePicture);
-                            if(profilePicture == null )
+                            if(profilePicture.equals("null") )
                             {
-                                profileProfilePicture.setImageResource(R.drawable.get_started_button);
+                                profileProfilePicture.setImageResource(R.drawable.img_1);
                             }
                             else
                             {
