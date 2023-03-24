@@ -34,5 +34,11 @@
         android:title="Logout"
         android:icon="@drawable/baseline_logout_24"/>
 
+    <item
+        android:id="@+id/changePasswordNavDrawer"
+        android:title="Change Password"
+        android:icon="@drawable/baseline_logout_24"/>
+
+
 
 </menu>

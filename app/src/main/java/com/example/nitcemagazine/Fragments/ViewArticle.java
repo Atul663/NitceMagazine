@@ -38,6 +38,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.itextpdf.io.codec.Base64;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
@@ -108,33 +109,36 @@ public class ViewArticle extends AppCompatActivity {
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+//            }
+
                 System.out.println(imgfile.get(0));
-//                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M)
-//                {
-//                    if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED)
-//                    {
-//                        String [] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-//                        requestPermissions(permissions,STORAGE_CODE);
-//                    }
-//                    else {
-//                        try {
-//                            createPdf();
-//                        } catch (FileNotFoundException e) {
-//                            throw new RuntimeException(e);
-//                        } catch (DocumentException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                    }
-//                }
-//                else {
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M)
+                {
+                    if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED)
+                    {
+                        String [] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        requestPermissions(permissions,STORAGE_CODE);
+                    }
+                    else {
+                        try {
+                            createPdf();
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        } catch (DocumentException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+                else {
                     try {
                         createPdf();
                     } catch (FileNotFoundException e) {
                         throw new RuntimeException(e);
-                    }catch (DocumentException e) {
+                    } catch (DocumentException e) {
                         throw new RuntimeException(e);
                     }
-//                }
+                }
             }
         });
         reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
@@ -220,14 +224,15 @@ public class ViewArticle extends AppCompatActivity {
     private void createPdf() throws FileNotFoundException, DocumentException {
         String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
         File file = new File(pdfPath, id+".pdf");
-        OutputStream outputStream = new FileOutputStream(file);
+
 
         Document doc = new Document();
 
 
 
         try {
-            PdfWriter.getInstance(doc,outputStream);
+//            OutputStream outputStream = new FileOutputStream(file);
+            PdfWriter.getInstance(doc,new FileOutputStream(file));
 
             doc.open();
 
@@ -238,6 +243,10 @@ public class ViewArticle extends AppCompatActivity {
             Paragraph p = new Paragraph(title,fontSize_10);
             doc.add(p);
             doc.add(new Paragraph(desc));
+            doc.close();
+
+            Toast.makeText(ViewArticle.this, "Pdf downloaded successfully", Toast.LENGTH_SHORT).show();
+
 //            String urlOfImage = imgfile.get(0);
 //
 //
@@ -254,7 +263,6 @@ public class ViewArticle extends AppCompatActivity {
 //
 //            doc.add(Image.getInstance(imgfile.get(0))); //Add image to document
 
-            doc.close();
 
         }
         catch (Exception e)
@@ -262,26 +270,25 @@ public class ViewArticle extends AppCompatActivity {
             System.out.println(e);
         }
 
-        Toast.makeText(ViewArticle.this, "Pdf downloaded successfully", Toast.LENGTH_SHORT).show();
 
     }
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        switch (requestCode) {
-//            case STORAGE_CODE:
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    try {
-//                        createPdf();
-//                    } catch (FileNotFoundException e) {
-//                        throw new RuntimeException(e);
-//                    } catch (DocumentException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                } else {
-//                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-//                }
-//
-//        }
-//    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case STORAGE_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        createPdf();
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    } catch (DocumentException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+
+        }
+    }
 }

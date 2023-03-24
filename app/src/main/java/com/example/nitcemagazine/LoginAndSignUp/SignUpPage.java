@@ -77,34 +77,28 @@ public class SignUpPage extends AppCompatActivity {
 
                 if(userEmailId.isEmpty() && userPassword.isEmpty() && confirmPasswordUser.isEmpty() && nameUser.isEmpty())
                 {
-                    Toast.makeText(SignUpPage.this, "Please enter the Email id and Password", Toast.LENGTH_SHORT).show();
-                }
-                else if(userEmailId.isEmpty())
+                    Toast.makeText(SignUpPage.this, "Please enter the required field", Toast.LENGTH_SHORT).show();
+                } else if(userEmailId.isEmpty())
                 {
                     Toast.makeText(SignUpPage.this, "Please enter a Email id", Toast.LENGTH_SHORT).show();
-
-                }
-                else if(userPassword.isEmpty())
+                } else if(userPassword.isEmpty())
                 {
                     Toast.makeText(SignUpPage.this, "Please enter a password", Toast.LENGTH_SHORT).show();
                 } else if (confirmPasswordUser.isEmpty()) {
-                    Toast.makeText(SignUpPage.this, "Please enter a password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpPage.this, "Please enter confirm password.", Toast.LENGTH_SHORT).show();
 
                 } else if (nameUser.isEmpty()) {
-                    Toast.makeText(SignUpPage.this, "Please enter a password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpPage.this, "Please enter name", Toast.LENGTH_SHORT).show();
 
                 } else if (!confirmPasswordUser.equals(userPassword)) {
-                    Toast.makeText(SignUpPage.this, "Please enter a password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpPage.this, "Password does not match with confirm password", Toast.LENGTH_SHORT).show();
 
                 } else if(Patterns.EMAIL_ADDRESS.matcher(userEmailId).matches())
                 {
-                    boolean check = checkNitcEmail(userEmailId);
+                    boolean check = checkNitcEmail(userEmailId,nameUser);
                     if(check) {
                         signUpFirebase(userEmailId, userPassword);
                     }
-                    else
-                        Toast.makeText(SignUpPage.this, "Enter NITC email id", Toast.LENGTH_SHORT).show();
-
                 }
                 else
                 {
@@ -131,11 +125,22 @@ public class SignUpPage extends AppCompatActivity {
         });
     }
 
-    private Boolean checkNitcEmail(String userEmailId) {
+    private Boolean checkNitcEmail(String userEmailId, String nameUser) {
         String email[] = userEmailId.split("@");
-        if(email[1].equals("nitc.ac.in"))
-            return true;
-        return false;
+        if(!email[1].equals("nitc.ac.in")) {
+            Toast.makeText(SignUpPage.this, "Please enter a NITC email id", Toast.LENGTH_SHORT).show();
+            return false;
+        } else{
+            for(int i = 0; i < name.length(); i++)
+            {
+                if(!Character.isAlphabetic(nameUser.charAt(i)))
+                {
+                    Toast.makeText(SignUpPage.this, "Your name contains non alphabetic character", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private void signUpFirebase(String userEmailId, String userPassword) {

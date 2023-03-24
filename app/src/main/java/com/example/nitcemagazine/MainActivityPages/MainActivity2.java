@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,10 +34,13 @@ import com.example.nitcemagazine.LoginAndSignUp.SignUpPage;
 import com.example.nitcemagazine.PostUnpostedArticle.PostUnpostedArticles;
 import com.example.nitcemagazine.ReviewUnpostedArticle.ReviewUnpostedArticles;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
@@ -192,6 +196,8 @@ public class MainActivity2 extends AppCompatActivity {
                 } else if (id == R.id.removeReviewerNavDrawer) {
                     Intent intent = new Intent(MainActivity2.this, DeleteReviewer.class);
                     startActivity(intent);
+                } else if (id == R.id.changePasswordNavDrawer) {
+                    updatePassword();
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);
@@ -368,6 +374,70 @@ public class MainActivity2 extends AppCompatActivity {
 
                 }
 
+            }
+        });
+    }
+
+    void updatePassword()
+    {
+        View changePasswodView = LayoutInflater.from(MainActivity2.this).inflate(R.layout.change_password_dialog_box,null);
+
+        EditText oldPassword = changePasswodView.findViewById(R.id.oldPassword);
+        EditText newPassword = changePasswodView.findViewById(R.id.newPassword);
+        EditText confirmPassword = changePasswodView.findViewById(R.id.confirmPassword);
+
+        Button changePassword = changePasswodView.findViewById(R.id.ChangePassword);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity2.this);
+        builder.setView(changePasswodView);
+        AlertDialog dialog1 =  builder.create();
+        dialog1.show();
+
+        changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String oldPass = oldPassword.getText().toString();
+                String newPass = newPassword.getText().toString();
+                String confirmPass = confirmPassword.getText().toString();
+
+                if(oldPass.isEmpty()) {
+                    Toast.makeText(MainActivity2.this, "please enter your old password", Toast.LENGTH_SHORT).show();
+                } else if (newPass.isEmpty()) {
+                    Toast.makeText(MainActivity2.this, "please enter a new password", Toast.LENGTH_SHORT).show();
+                } else if (confirmPass.isEmpty()) {
+                    Toast.makeText(MainActivity2.this, "please enter confirm password", Toast.LENGTH_SHORT).show();
+                } else if (!newPass.equals(confirmPass)) {
+                    Toast.makeText(MainActivity2.this, "password and confirm password does not match", Toast.LENGTH_SHORT).show();
+                } else {
+                    dialog1.dismiss();
+                    changeOldPassword(oldPass,newPass);
+                }
+
+            }
+        });
+    }
+
+    void changeOldPassword(String oldPass, String newPass)
+    {
+        FirebaseUser user1 = auth.getCurrentUser();
+
+        AuthCredential authCredential = EmailAuthProvider.getCredential(user1.getEmail(),oldPass);
+
+        user1.reauthenticate(authCredential).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                user1.updatePassword(newPass).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(MainActivity2.this, "Password Updated", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity2.this, "Password not updated", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
