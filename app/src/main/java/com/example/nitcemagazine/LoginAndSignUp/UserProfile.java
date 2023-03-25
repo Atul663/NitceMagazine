@@ -1,10 +1,13 @@
 package com.example.nitcemagazine.LoginAndSignUp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nitcemagazine.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +26,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -35,8 +43,12 @@ public class UserProfile extends AppCompatActivity {
     DatabaseReference dbreference;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = auth.getCurrentUser();
+    String roleOfUser;
 
     String rl,imgurl,nm;
+
+    boolean imgControl = false;
+    Uri imageUri;
     FirebaseStorage storage;
     StorageReference storageReference;
 
@@ -58,7 +70,7 @@ public class UserProfile extends AppCompatActivity {
         dbreference.child("UserType").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String roleOfUser = snapshot.getValue().toString();
+                roleOfUser = snapshot.getValue().toString();
                 dbreference.child(roleOfUser).child(user.getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -111,10 +123,20 @@ public class UserProfile extends AppCompatActivity {
                 }
                 //Change name and profile pic
                 else{
-                    //Change name
-                    dbreference.child(rl).child(user.getUid()).child("name").setValue(name.getText());
+                    if((!name.getText().toString().equals(nm)) && imgControl==false){
+                        dbreference.child(roleOfUser).child(user.getUid()).child("name").setValue(name.getText().toString());
+                    }
+                    else if(name.getText().toString().equals(nm) && imgControl==true){
+                        setProfilePicture();
+                    }
+                    else if((!name.getText().toString().equals(nm)) && imgControl==true){
+                        dbreference.child(roleOfUser).child(user.getUid()).child("name").setValue(name.getText().toString());
 
-                    //change profilePicture
+                        //change profilePicture
+                        setProfilePicture();
+                    }
+                    //Change name
+
 
 
                     Toast.makeText(UserProfile.this, "Data Changed Successfully", Toast.LENGTH_SHORT).show();
@@ -129,7 +151,65 @@ public class UserProfile extends AppCompatActivity {
 
     }
     public static boolean isAlpha(String s) {
-        return s.matches("^[a-zA-Z]*$");
+        return s.matches("^[a-zA-Z ]*$");
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            imageUri = data.getData();
+            Picasso.get().load(imageUri).into(userProfileImage);
+            imgControl = true;
+        }
+        else
+        {
+            imgControl = false;
+        }
+    }
+
+    private void setProfilePicture() {
+        if(imgControl)
+        {
+            UUID randomId = UUID.randomUUID();
+            String imgName = "images/" + randomId + ".jpg";
+            storageReference.child(imgName).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    StorageReference myStorageRef = storage.getReference(imgName);
+                    myStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+
+                            String filePath = uri.toString();
+                            dbreference.child(roleOfUser).child(user.getUid()).child("profilePictures").setValue(filePath).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(UserProfile.this, "Success", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(UserProfile.this, "Fail", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(UserProfile.this, "this fail", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+
+        else
+        {
+            dbreference.child("Student").child(auth.getCurrentUser().getUid()).child("profilePictures").setValue("null");
+        }
+    }
 }
