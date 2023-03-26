@@ -1,4 +1,4 @@
-package com.example.nitcemagazine;
+package com.example.nitcemagazine.DeleteArticle;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nitcemagazine.FragmentAdapters.ModelClass;
 import com.example.nitcemagazine.MainActivityPages.MainActivity2;
 import com.example.nitcemagazine.PostUnpostedArticle.EditorPage;
+import com.example.nitcemagazine.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

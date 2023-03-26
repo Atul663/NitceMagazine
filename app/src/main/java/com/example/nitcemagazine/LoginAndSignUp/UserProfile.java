@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nitcemagazine.MainActivityPages.MainActivity2;
 import com.example.nitcemagazine.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -186,6 +187,9 @@ public class UserProfile extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Toast.makeText(UserProfile.this, "Success", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(UserProfile.this, MainActivity2.class);
+                                    startActivity(intent);
+                                    finish();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override

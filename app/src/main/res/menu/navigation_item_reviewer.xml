@@ -19,12 +19,17 @@
     <item
         android:id="@+id/reviewArticleNavDrawer"
         android:title="Review Article"
-        android:icon="@drawable/baseline_analytics_24"
-        />
-
+        android:icon="@drawable/baseline_analytics_24" />
 
     <item
         android:id="@+id/logoutNavDrawer"
         android:title="Logout"
         android:icon="@drawable/baseline_logout_24"/>
+
+    <item
+        android:id="@+id/myArticleNavDrawer"
+        android:title="Profile"
+        android:icon="@drawable/baseline_logout_24"/>
+
+
 </menu>

@@ -20,4 +20,10 @@
         android:id="@+id/logoutNavDrawer"
         android:title="Logout"
         android:icon="@drawable/baseline_logout_24"/>
+
+    <item
+        android:id="@+id/myArticleNavDrawer"
+        android:title="Profile"
+        android:icon="@drawable/baseline_logout_24"/>
+
 </menu>

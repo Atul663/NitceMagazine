@@ -10,15 +10,24 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true"
         android:theme="@style/Theme.NITCeMagazine"
         tools:targetApi="31">
+        <activity
+            android:name=".ViewMyArticle"
+            android:exported="false" />
+        <activity
+            android:name=".MyArticle"
+            android:exported="false" />
+        <activity
+            android:name=".LoginAndSignUp.UserProfile"
+            android:exported="false" />
         <activity
             android:name=".AddReviewerAndEditor.DeleteReviewer"
             android:exported="false" />
         <activity
-            android:name=".DeleteArticle"
+            android:name=".DeleteArticle.DeleteArticle"
             android:exported="false" />
         <activity
             android:name=".ReviewUnpostedArticle.ReviewUnpostedArticles"

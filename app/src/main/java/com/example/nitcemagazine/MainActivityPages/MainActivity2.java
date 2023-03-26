@@ -26,8 +26,10 @@ import android.widget.Toast;
 import com.example.nitcemagazine.AddReviewerAndEditor.AddEditor;
 import com.example.nitcemagazine.AddReviewerAndEditor.AddReviewer;
 import com.example.nitcemagazine.AddReviewerAndEditor.DeleteReviewer;
-import com.example.nitcemagazine.DeleteArticle;
+import com.example.nitcemagazine.DeleteArticle.DeleteArticle;
 import com.example.nitcemagazine.LoginAndSignUp.LoginActivity;
+import com.example.nitcemagazine.LoginAndSignUp.UserProfile;
+import com.example.nitcemagazine.MyArticle;
 import com.example.nitcemagazine.PostArticle.AddPostFragement;
 import com.example.nitcemagazine.R;
 import com.example.nitcemagazine.LoginAndSignUp.SignUpPage;
@@ -198,6 +200,13 @@ public class MainActivity2 extends AppCompatActivity {
                     startActivity(intent);
                 } else if (id == R.id.changePasswordNavDrawer) {
                     updatePassword();
+                } else if (id == R.id.userProfileNavDrawer) {
+                    Intent intent = new Intent(MainActivity2.this, UserProfile.class);
+                    startActivity(intent);
+                }
+                else if (id == R.id.myArticleNavDrawer) {
+                    Intent intent = new Intent(MainActivity2.this, MyArticle.class);
+                    startActivity(intent);
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);
