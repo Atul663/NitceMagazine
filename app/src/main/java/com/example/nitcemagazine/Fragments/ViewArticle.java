@@ -238,7 +238,7 @@ public class ViewArticle extends AppCompatActivity {
 
             String desc = articleDesc.getText().toString();
             String title = articelTitle.getText().toString();
-            doc.addAuthor("Atul");
+            doc.addAuthor("NITC e-Magazine");
             Font fontSize_10 =  FontFactory.getFont(FontFactory.TIMES, 18f);
             Paragraph p = new Paragraph(title,fontSize_10);
             doc.add(p);

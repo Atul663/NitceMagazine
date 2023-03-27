@@ -29,7 +29,7 @@ import com.example.nitcemagazine.AddReviewerAndEditor.DeleteReviewer;
 import com.example.nitcemagazine.DeleteArticle.DeleteArticle;
 import com.example.nitcemagazine.LoginAndSignUp.LoginActivity;
 import com.example.nitcemagazine.LoginAndSignUp.UserProfile;
-import com.example.nitcemagazine.MyArticle;
+import com.example.nitcemagazine.MyArticles.MyArticle;
 import com.example.nitcemagazine.PostArticle.AddPostFragement;
 import com.example.nitcemagazine.R;
 import com.example.nitcemagazine.LoginAndSignUp.SignUpPage;

@@ -15,10 +15,10 @@
         android:theme="@style/Theme.NITCeMagazine"
         tools:targetApi="31">
         <activity
-            android:name=".ViewMyArticle"
+            android:name=".MyArticles.ViewMyArticle"
             android:exported="false" />
         <activity
-            android:name=".MyArticle"
+            android:name=".MyArticles.MyArticle"
             android:exported="false" />
         <activity
             android:name=".LoginAndSignUp.UserProfile"

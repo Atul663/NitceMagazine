@@ -1,4 +1,4 @@
-package com.example.nitcemagazine;
+package com.example.nitcemagazine.MyArticles;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,9 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.nitcemagazine.FragmentAdapters.EducationalAdapter;
 import com.example.nitcemagazine.FragmentAdapters.ModelClass;
-import com.example.nitcemagazine.Fragments.ViewArticle;
+import com.example.nitcemagazine.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
