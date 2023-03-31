@@ -34,6 +34,7 @@ import com.example.nitcemagazine.PostArticle.AddPostFragement;
 import com.example.nitcemagazine.R;
 import com.example.nitcemagazine.LoginAndSignUp.SignUpPage;
 import com.example.nitcemagazine.PostUnpostedArticle.PostUnpostedArticles;
+import com.example.nitcemagazine.RejectedArticle.RejectedArticle;
 import com.example.nitcemagazine.ReviewUnpostedArticle.ReviewUnpostedArticles;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -206,6 +207,9 @@ public class MainActivity2 extends AppCompatActivity {
                 }
                 else if (id == R.id.myArticleNavDrawer) {
                     Intent intent = new Intent(MainActivity2.this, MyArticle.class);
+                    startActivity(intent);
+                } else if (id == R.id.rejectedArticleNavDrawer) {
+                    Intent intent = new Intent(MainActivity2.this, RejectedArticle.class);
                     startActivity(intent);
                 }
 

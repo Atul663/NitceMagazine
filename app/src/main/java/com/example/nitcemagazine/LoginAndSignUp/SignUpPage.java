@@ -133,7 +133,7 @@ public class SignUpPage extends AppCompatActivity {
         } else{
             for(int i = 0; i < name.length(); i++)
             {
-                if(!Character.isAlphabetic(nameUser.charAt(i)))
+                if(!Character.isAlphabetic(nameUser.charAt(i)) || !Character.isSpaceChar(nameUser.charAt(i)))
                 {
                     Toast.makeText(SignUpPage.this, "Your name contains non alphabetic character", Toast.LENGTH_SHORT).show();
                     return false;
