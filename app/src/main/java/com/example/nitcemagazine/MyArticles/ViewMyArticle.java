@@ -24,7 +24,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewMyArticle extends AppCompatActivity {    TextView articelTitle,articleDesc,comment;
+public class ViewMyArticle extends AppCompatActivity {
+    TextView articelTitle,articleDesc,comment;
     ImageView articleImageCard,downloadButton;
     Button addComment;
     RecyclerView commentRecyclerView;
@@ -34,7 +35,7 @@ public class ViewMyArticle extends AppCompatActivity {    TextView articelTitle,
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
-    String id;
+    String id,status;
 
 
     @Override
@@ -46,7 +47,9 @@ public class ViewMyArticle extends AppCompatActivity {    TextView articelTitle,
         articleImageCard = findViewById(R.id.articleImageArticleView);
 
         id = getIntent().getStringExtra("ArticleIdIntent");
+        status = getIntent().getStringExtra("ArticleStatus");
 
+        if(status.equalsIgnoreCase("posted")){
         reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -62,9 +65,7 @@ public class ViewMyArticle extends AppCompatActivity {    TextView articelTitle,
                 if (!img.equalsIgnoreCase("null")) {
                     Picasso.get().load(img).into(articleImageCard);
 //                    imgfile.add(img);
-                }
-                else
-                {
+                } else {
                     articleImageCard.setVisibility(View.GONE);
                 }
 
@@ -75,5 +76,34 @@ public class ViewMyArticle extends AppCompatActivity {    TextView articelTitle,
 
             }
         });
+    }
+        else {
+            reference.child("Article").child(id).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String title = snapshot.child("title").getValue().toString();
+                    String desc = snapshot.child("description").getValue().toString();
+                    String img = snapshot.child("ArticleImage").getValue().toString();
+
+
+                    articelTitle.setText(title);
+                    articleDesc.setText(desc);
+
+
+                    if (!img.equalsIgnoreCase("null")) {
+                        Picasso.get().load(img).into(articleImageCard);
+//                    imgfile.add(img);
+                    } else {
+                        articleImageCard.setVisibility(View.GONE);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
     }
 }

@@ -34,7 +34,17 @@
 
     <item
         android:id="@+id/myArticleNavDrawer"
+        android:title="My Article"
+        android:icon="@drawable/baseline_logout_24"/>
+
+    <item
+        android:id="@+id/userProfileNavDrawer"
         android:title="Profile"
+        android:icon="@drawable/baseline_logout_24"/>
+
+    <item
+        android:id="@+id/rejectedArticleNavDrawer"
+        android:title="Rejected Articles"
         android:icon="@drawable/baseline_logout_24"/>
 
 </menu>

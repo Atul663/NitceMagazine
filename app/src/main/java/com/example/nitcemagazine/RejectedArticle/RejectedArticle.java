@@ -1,4 +1,4 @@
-package com.example.nitcemagazine.MyArticles;
+package com.example.nitcemagazine.RejectedArticle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,23 +21,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyArticle extends AppCompatActivity {
+public class RejectedArticle extends AppCompatActivity {
 
     List<ModelClass> articleList;
-    MyArticleAdapter adapter;
+    RejectedArticleAdapter adapter;
     RecyclerView recyclerView;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = auth.getCurrentUser();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
     ModelClass modelClass = new ModelClass();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_article);
+        setContentView(R.layout.activity_rejected_article);
 
-        recyclerView = findViewById(R.id.recyclerViewMyArticle);
+        recyclerView = findViewById(R.id.recyclerViewRejectedArticle);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -48,14 +47,14 @@ public class MyArticle extends AppCompatActivity {
 
     void getArticle()
     {
-        reference.child("PostedArticle").addChildEventListener(new ChildEventListener() {
+        reference.child("RejectedArticle").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 modelClass = snapshot.getValue(ModelClass.class);
                 if(snapshot.child("authorUid").getValue().toString().equalsIgnoreCase(user.getUid())) {
                     articleList.add(modelClass);
                     modelClass.setId(snapshot.getKey());
-                    modelClass.setStatus("Posted");
+                    System.out.println("hii " +modelClass.getId());
 
                     adapter.notifyDataSetChanged();
                 }
@@ -83,43 +82,7 @@ public class MyArticle extends AppCompatActivity {
 
             }
         });
-        reference.child("Article").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                modelClass = snapshot.getValue(ModelClass.class);
-                if(snapshot.child("authorUid").getValue().toString().equalsIgnoreCase(user.getUid())) {
-                    articleList.add(modelClass);
-                    modelClass.setId(snapshot.getKey());
-                    modelClass.setStatus("Pending");
-
-                    adapter.notifyDataSetChanged();
-                }
-
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        adapter = new MyArticleAdapter(articleList, MyArticle.this);
+        adapter = new RejectedArticleAdapter(articleList, RejectedArticle.this);
         recyclerView.setAdapter(adapter);
     }
 }
-
