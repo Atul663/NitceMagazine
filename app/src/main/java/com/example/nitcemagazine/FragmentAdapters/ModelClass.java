@@ -1,7 +1,7 @@
 package com.example.nitcemagazine.FragmentAdapters;
 
 public class ModelClass {
-    String title,desc,id,category,img,reviewCount,status;
+    String title,desc,id,category,img,reviewCount,status,uid;
 
     public ModelClass(){}
 
@@ -66,5 +66,13 @@ public class ModelClass {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

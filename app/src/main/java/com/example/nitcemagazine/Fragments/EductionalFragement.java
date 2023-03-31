@@ -126,8 +126,12 @@ public class EductionalFragement extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
                 modelClass = snapshot.getValue(ModelClass.class);
+                modelClass.setUid(snapshot.child("authorUid").getValue().toString());
+//                System.out.println("+++++++++++++++++++"+modelClass.getUid());
                 String cat = snapshot.child("category").getValue().toString();
-                if(modelClass.getCategory().equalsIgnoreCase("educational") && modelClass.getTitle().toLowerCase().contains(str.toLowerCase())) {
+                if(modelClass.getCategory().equalsIgnoreCase("educational") && (modelClass.getTitle().toLowerCase().contains(str.toLowerCase())))
+                // || modelClass.getUid().toLowerCase().contains(str.toLowerCase())))
+                     {
                     articleList2.add(modelClass);
                     modelClass.setId(snapshot.getKey());
                     adapter.notifyDataSetChanged();
