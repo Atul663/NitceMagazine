@@ -30,6 +30,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -140,9 +143,27 @@ public class AddPostFragement extends Fragment {
                     key = reference.child("Article").push().getKey();
                     reference.child("Article").child(key).setValue(articleDetails);
 //                setArticleImage();
+
+                    //Add article id with empty reviewer List to Review Table
+                    try {
+                        ArrayList<String> rl=new ArrayList<String>();
+                        DatabaseReference ref=reference.child("Review").child(key);
+                        Map<String,Object> map=new HashMap<>();
+                        map.put("articleid",key);
+                        map.put("reviewerlist",rl);
+                        ref.setValue(map);
+                    }
+                    catch (Exception e){
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();;
+                    }
+
                     Intent intent = new Intent(getActivity(), MainActivity2.class);
                     startActivity(intent);
                     getActivity().finish();
+
+
+
+
                 }
             }
         });

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.nitcemagazine.FragmentAdapters.ModelClass;
 import com.example.nitcemagazine.PostUnpostedArticle.PostUnpostedArticleAdapter;
@@ -19,6 +20,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +34,13 @@ public class ReviewUnpostedArticles extends AppCompatActivity {
     FirebaseUser user = auth.getCurrentUser();
     List<ModelClass> articleList;
 
+    ArrayList<String> articleListFromReview;
+
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
     ModelClass modelClass = new ModelClass();
+    ArrayList<String> unReviewedArticle=new ArrayList<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +52,40 @@ public class ReviewUnpostedArticles extends AppCompatActivity {
 
         articleList = new ArrayList<>();
 
+        //getArticle();
+        //Yaha se add kiya/*
+
+
+        String uid=user.getUid().toString();
+        DatabaseReference ref=reference.child("Review");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot childSnapshot : snapshot.getChildren()){
+
+                    String artId = childSnapshot.child("articleid").getValue().toString();
+                    List<String> reviewers = childSnapshot.child("reviewers").getValue(new GenericTypeIndicator<List<String>>() {});
+
+                    if(reviewers == null || !reviewers.contains(uid)){
+                        unReviewedArticle.add(artId);
+                    }
+                }
+                System.out.println(unReviewedArticle);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        //yaha tak
         getArticle();
     }
 
     void getArticle()
     {
-        reference.child("Article").addChildEventListener(new ChildEventListener() {
+
+        /*reference.child("Article").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 modelClass = snapshot.getValue(ModelClass.class);
@@ -78,7 +113,30 @@ public class ReviewUnpostedArticles extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });*/
+
+    //yaha se
+        reference.child("Article").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot childSnapshot : snapshot.getChildren()){
+                    String key=childSnapshot.getKey();
+                    if(unReviewedArticle.contains(key)){
+                        modelClass = childSnapshot.getValue(ModelClass.class);
+                        articleList.add(modelClass);
+                        modelClass.setId(childSnapshot.getKey());
+                        reviewUnpostedArticleAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         });
+        //yaha tak
+
         reviewUnpostedArticleAdapter= new ReviewUnpostedArticleAdapter(articleList, ReviewUnpostedArticles.this);
         unpostedArticle.setAdapter(reviewUnpostedArticleAdapter);
     }

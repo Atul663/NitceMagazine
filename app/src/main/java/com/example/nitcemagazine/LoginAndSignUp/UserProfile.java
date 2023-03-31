@@ -82,7 +82,12 @@ public class UserProfile extends AppCompatActivity {
                         imgurl=snapshot.child("profilePictures").getValue().toString();
 
                         //Set the data to View
-                        Picasso.get().load(imgurl).into(userProfileImage);
+                        if(!imgurl.equals("null")) {
+                            Picasso.get().load(imgurl).into(userProfileImage);
+                        }
+                        else{
+                            userProfileImage.setImageResource(R.drawable.img_1);
+                        }
                         name.setText(nm);
                         email.setText(eml);
                         role.setText(rl);

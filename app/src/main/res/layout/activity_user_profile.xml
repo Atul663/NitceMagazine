@@ -18,6 +18,9 @@
             android:layout_marginTop="100dp"
             android:src="@drawable/img_1"
             android:layout_gravity="center"
+            app:civ_border_color="@color/black"
+            app:civ_border_width="3dp"
+            app:srcCompat="@drawable/img_1"
             />
 
         <TextView

@@ -240,6 +240,8 @@ public class EditorPage extends AppCompatActivity {
                                 Toast.makeText(EditorPage.this, "Article Posted Successfully", Toast.LENGTH_SHORT).show();
                                 //delete from Articles Table
                                 dbreference.child("Article").child(ArticleId).removeValue();
+                                //delete from review Table
+                                dbreference.child("Review").child(ArticleId).removeValue();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {

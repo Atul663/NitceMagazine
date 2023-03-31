@@ -2,8 +2,12 @@ package com.example.nitcemagazine.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.nitcemagazine.FragmentAdapters.HomeAdapter;
 import com.example.nitcemagazine.FragmentAdapters.ModelClass;
 import com.example.nitcemagazine.FragmentAdapters.SportAdapter;
 import com.example.nitcemagazine.R;
@@ -48,6 +53,11 @@ public class SportFragement extends Fragment {
         getArticle();
 
         return view;
+    }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
     }
 
     void getArticle()
@@ -87,6 +97,66 @@ public class SportFragement extends Fragment {
             }
         });
         adapter = new SportAdapter(articleList, getContext());
+        recyclerView.setAdapter(adapter);
+    }
+
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.search_bar,menu);
+        MenuItem item=menu.findItem(R.id.search_bar);
+        SearchView searchView=(SearchView)item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                txtSearch(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                txtSearch(newText);
+                return false;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+    private void txtSearch(String str){
+        List<ModelClass> articleList2=new ArrayList<>();
+        reference.child("PostedArticle").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                modelClass = snapshot.getValue(ModelClass.class);
+                String cat = snapshot.child("category").getValue().toString();
+                if(modelClass.getCategory().equalsIgnoreCase("sport") && modelClass.getTitle().toLowerCase().contains(str.toLowerCase())) {
+                    articleList2.add(modelClass);
+                    modelClass.setId(snapshot.getKey());
+                    adapter.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        adapter = new SportAdapter(articleList2, getContext());
         recyclerView.setAdapter(adapter);
     }
 }

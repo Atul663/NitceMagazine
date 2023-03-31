@@ -22,8 +22,13 @@
         android:icon="@drawable/baseline_logout_24"/>
 
     <item
-        android:id="@+id/myArticleNavDrawer"
+        android:id="@+id/userProfileNavDrawer"
         android:title="Profile"
+        android:icon="@drawable/baseline_logout_24"/>
+
+    <item
+        android:id="@+id/myArticleNavDrawer"
+        android:title="My Articles"
         android:icon="@drawable/baseline_logout_24"/>
 
 </menu>
