@@ -12,12 +12,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nitcemagazine.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class ReviewerPage extends AppCompatActivity {
 
@@ -32,6 +36,9 @@ public class ReviewerPage extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference dbreference = database.getReference();
+
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser user = auth.getCurrentUser();
     int reviewCount=0;
     float prevRating=0;
 
@@ -94,6 +101,46 @@ public class ReviewerPage extends AppCompatActivity {
 
                 // show a toast message to indicate that the review has been submitted
                 Toast.makeText(ReviewerPage.this, "Review submitted", Toast.LENGTH_SHORT).show();
+
+                //Add user in reviewerList in Review Table
+                String Reviewer_id=user.getUid().toString();
+                DatabaseReference reviewers_ref=dbreference.child("Review").child(ArticleId).child("reviewers");
+                reviewers_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<String>  l=new ArrayList<String>();
+                        for (DataSnapshot childsnapshot:snapshot.getChildren()){
+                            String r_id=childsnapshot.getValue().toString();
+                            l.add(r_id);
+                        }
+                        l.add(Reviewer_id);
+                        reviewers_ref.setValue(l);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                /*reviewers_ref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<String>  l=new ArrayList<String>();
+                        for (DataSnapshot childsnapshot:snapshot.getChildren()){
+                            String r_id=childsnapshot.getValue().toString();
+                            l.add(r_id);
+                        }
+                        l.add(Reviewer_id);
+                        reviewers_ref.setValue(l);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                dbreference.child("Review").child(ArticleId).child("reviewers");*/
+
             }
         });
     }
