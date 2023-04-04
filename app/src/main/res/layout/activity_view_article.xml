@@ -79,8 +79,8 @@
 
             <EditText
                 android:id="@+id/commentArticleView"
-                android:layout_width="250dp"
-                android:layout_height="48dp"
+                android:layout_width="230dp"
+                android:layout_height="96dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="4dp"
                 android:ems="10"

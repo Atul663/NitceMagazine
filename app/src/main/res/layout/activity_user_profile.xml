@@ -9,7 +9,8 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="32dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profileImage"
@@ -35,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"
             android:hint="Name"
             android:background="@drawable/edit_text_border"
             />
@@ -53,6 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:paddingLeft="10dp"
             android:text="ProfileEmail"
             android:textSize="20dp"
 
@@ -71,6 +74,7 @@
             android:id="@+id/textViewProfileRole"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
             android:layout_marginTop="15dp"
             android:text="UserRole"
             android:textSize="20dp"
