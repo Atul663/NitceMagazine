@@ -26,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class EductionalFragement extends Fragment {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
     ModelClass modelClass = new ModelClass();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -128,14 +130,21 @@ public class EductionalFragement extends Fragment {
                 modelClass = snapshot.getValue(ModelClass.class);
                 modelClass.setUid(snapshot.child("authorUid").getValue().toString());
 //                System.out.println("+++++++++++++++++++"+modelClass.getUid());
+                String auid=snapshot.child("authorUid").getValue().toString();
+                System.out.println("*"+auid);
+
+
                 String cat = snapshot.child("category").getValue().toString();
-                if(modelClass.getCategory().equalsIgnoreCase("educational") && (modelClass.getTitle().toLowerCase().contains(str.toLowerCase())))
-                // || modelClass.getUid().toLowerCase().contains(str.toLowerCase())))
-                     {
+
+                if(modelClass.getCategory().equalsIgnoreCase("educational") && modelClass.getTitle().toLowerCase().contains(str.toLowerCase())) {
                     articleList2.add(modelClass);
                     modelClass.setId(snapshot.getKey());
                     adapter.notifyDataSetChanged();
-                }
+                } /*else if (modelClass.getCategory().equalsIgnoreCase("educational") && modelClass.getAuthorName().toLowerCase().contains(str.toLowerCase())) {
+                    articleList2.add(modelClass);
+                    modelClass.setId(snapshot.getKey());
+                    adapter.notifyDataSetChanged();
+                }*/
             }
 
             @Override
