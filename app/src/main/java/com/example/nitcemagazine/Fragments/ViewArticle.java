@@ -6,11 +6,13 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,8 +21,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,9 +32,17 @@ import android.widget.Toast;
 import com.example.nitcemagazine.Comment.CommentAdapter;
 import com.example.nitcemagazine.Comment.CommentDetailClass;
 import com.example.nitcemagazine.Comment.CommentModelClass;
+import com.example.nitcemagazine.MainActivityPages.MainActivity2;
 import com.example.nitcemagazine.R;
 import com.google.android.gms.common.api.Response;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -67,10 +79,12 @@ public class ViewArticle extends AppCompatActivity {
     ImageView articleImageCard,downloadButton;
     Button addComment;
     RecyclerView commentRecyclerView;
+    AlertDialog dialog;
 
     ArrayList <String > imgfile = new ArrayList<>();
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser user ;
     private static final int STORAGE_CODE = 1000;
 
     List<CommentModelClass> commentList;
@@ -80,6 +94,8 @@ public class ViewArticle extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
     String id;
+    EditText username,password;
+    Button signin;
 
     Bitmap bmp, scaledBmp;
     @Override
@@ -94,6 +110,7 @@ public class ViewArticle extends AppCompatActivity {
         addComment = findViewById(R.id.buttonAddCommentArticleView);
         commentRecyclerView = findViewById(R.id.recyclerViewArticleView);
         downloadButton = findViewById(R.id.downloadButton);
+
 
         downloadButton.setVisibility(View.VISIBLE);
 
@@ -174,15 +191,50 @@ public class ViewArticle extends AppCompatActivity {
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String commentText = comment.getText().toString();
+                user = auth.getCurrentUser();
+                if(user != null) {
+                    String commentText = comment.getText().toString();
 
-                DatabaseReference ref = database.getReference();
+                    DatabaseReference ref = database.getReference();
 
-                String commentKey = ref.child("ArticleComment").child(id).push().getKey();
-                CommentDetailClass commentDetailClass = new CommentDetailClass(commentText, auth.getCurrentUser().getUid(),id);
-                ref.child("ArticleComment").child(id).child(commentKey).setValue(commentDetailClass);
+                    String commentKey = ref.child("ArticleComment").child(id).push().getKey();
+                    CommentDetailClass commentDetailClass = new CommentDetailClass(commentText, auth.getCurrentUser().getUid(), id);
+                    ref.child("ArticleComment").child(id).child(commentKey).setValue(commentDetailClass);
 
-                comment.setText("");
+                    comment.setText("");
+                }
+                else {
+                    AlertDialog.Builder dialogLogin = new AlertDialog.Builder(ViewArticle.this);
+                    View loginView = getLayoutInflater().inflate(R.layout.dialog_login,null);
+
+                    username = loginView.findViewById(R.id.editTextDialogUsername);
+                    password = loginView.findViewById(R.id.editTextDialogPassword);
+                    signin = loginView.findViewById(R.id.buttonDialogLogin);
+                    dialogLogin.setView(loginView);
+                    dialog = dialogLogin.create();
+                    dialog.show();
+                    signin.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String userEmailId = username.getText().toString();
+                            String userPassword = password.getText().toString();
+
+                            if (userEmailId.isEmpty() && userPassword.isEmpty()) {
+                                Toast.makeText(ViewArticle.this, "Please enter the Email id and Password", Toast.LENGTH_SHORT).show();
+                            } else if (userEmailId.isEmpty()) {
+                                Toast.makeText(ViewArticle.this, "Please enter a Email id", Toast.LENGTH_SHORT).show();
+
+                            } else if (userPassword.isEmpty()) {
+                                Toast.makeText(ViewArticle.this, "Please enter a password", Toast.LENGTH_SHORT).show();
+                            } else if (Patterns.EMAIL_ADDRESS.matcher(userEmailId).matches()) {
+                                signInWithFirebase(userEmailId, userPassword);
+                            } else {
+                                Toast.makeText(ViewArticle.this, "Please enter a valid email id", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                }
             }
         });
     }
@@ -290,5 +342,67 @@ public class ViewArticle extends AppCompatActivity {
                 }
 
         }
+    }
+
+    private void signInWithFirebase(String userEmailId, String userPassword) {
+        auth.signInWithEmailAndPassword(userEmailId,userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()) {
+                    FirebaseUser user = auth.getCurrentUser();
+                    reference.child("UserType").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String role = snapshot.getValue().toString();
+                            if(role.equalsIgnoreCase("Admin"))
+                            {
+                                Toast.makeText(ViewArticle.this, "Sign in successful", Toast.LENGTH_SHORT).show();
+//                                Intent intent = new Intent(ViewArticle.this, MainActivity2.class);
+//                                startActivity(intent);
+                                dialog.cancel();
+
+                            }
+                            else if(auth.getCurrentUser().isEmailVerified())
+                            {
+                                Toast.makeText(ViewArticle.this, "Sign in successful", Toast.LENGTH_SHORT).show();
+//                                Intent intent = new Intent(ViewArticle.this, MainActivity2.class);
+//                                startActivity(intent);
+                                dialog.cancel();
+
+                            }
+                            else {
+                                auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+
+                                        Toast.makeText(ViewArticle.this, "Please verify your email.", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+
+                else
+                {
+                    if(task.getException() instanceof FirebaseAuthInvalidUserException)
+                    {
+                        Toast.makeText(ViewArticle.this, "Invalid User", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(task.getException() instanceof FirebaseAuthInvalidCredentialsException)
+                    {
+                        Toast.makeText(ViewArticle.this, "Password is wrong", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+            }
+        });
     }
 }

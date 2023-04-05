@@ -36,6 +36,7 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -147,6 +148,7 @@ public class EditorPage extends AppCompatActivity {
                         String reason=msg.getText().toString();
                         if(!reason.isEmpty()) {
                             //
+                            Long timeStamp = new Date().getTime();
                             Map<String,Object> map=new HashMap<>();
                             map.put("title",articletitle.getText());
                             map.put("description",description.getText());
@@ -156,7 +158,7 @@ public class EditorPage extends AppCompatActivity {
                             map.put("Rating",prevRating);
                             map.put("reviewCount",reviewCount);
                             map.put("Reason",reason);
-                            map.put("DateTime", ServerValue.TIMESTAMP);
+                            map.put("DateTime",timeStamp);
                             dbreference.child("RejectedArticle").child(ArticleId)
                                     .setValue(map)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
