@@ -36,6 +36,7 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -244,6 +245,14 @@ public class EditorPage extends AppCompatActivity {
                                 dbreference.child("Article").child(ArticleId).removeValue();
                                 //delete from review Table
                                 dbreference.child("Review").child(ArticleId).removeValue();
+
+                                //Enter Empty Liker List in Like Table
+                                ArrayList<String> lk=new ArrayList<String>();
+                                DatabaseReference ref=dbreference.child("Like").child(ArticleId);
+                                Map<String,Object> map=new HashMap<>();
+                                map.put("articleid",ArticleId);
+                                map.put("likers",lk);
+                                ref.setValue(map);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
