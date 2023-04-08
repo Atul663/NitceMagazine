@@ -145,7 +145,7 @@ public class EditorPage extends AppCompatActivity {
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mesg="Hi,\nWe are sorry to inform you that the post requested by you has been rejected due to following reason:\n";
+                        mesg="Hi,\nWe are sorry to inform you that the post requested by you '"+articletitle.getText()+"' has been rejected due to following reason:\n";
                         String reason=msg.getText().toString();
                         if(!reason.isEmpty()) {
                             //
@@ -179,7 +179,7 @@ public class EditorPage extends AppCompatActivity {
                                     });
 
                             //Send Email
-                            mesg = mesg + reason+"\nIf you don't repost the article within 15 days your article will be permanently deleted.\n\n"+articletitle.getText()+"\nThanks and Regards,\nNITC_E_MAGAZINE.";
+                            mesg = mesg + reason+"\nIf you don't repost the article within 15 days your article will be permanently deleted.\n\nThanks and Regards,\nNITC_E_MAGAZINE.";
                             dbreference.child("UserType").child(author).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -279,7 +279,7 @@ public class EditorPage extends AppCompatActivity {
                                 intent.setType("text/html");
                                 intent.putExtra(Intent.EXTRA_EMAIL, recipients);
                                 intent.putExtra(Intent.EXTRA_SUBJECT, "Your Post has been posted");
-                                String msg="Hi,\n This email is to inform you that the post requested by you has been posted on the basis on good reviews.Now you can check your post on our Article page by logging into the app.\n\n"+articletitle.getText()+" Thanks and Regards,\nNITC_E_MAGAZINE.";
+                                String msg="Hi,\n This email is to inform you that the post requested by you '"+articletitle.getText()+"' has been posted on the basis on good reviews.Now you can check your post on our Article page by logging into the app.\n\n Thanks and Regards,\nNITC_E_MAGAZINE.";
                                 intent.putExtra(Intent.EXTRA_TEXT, msg);
                                 startActivity(Intent.createChooser(intent, "Choose Email Client"));
 
