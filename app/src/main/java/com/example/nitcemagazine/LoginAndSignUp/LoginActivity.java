@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     Button signin;
 
     TextView signUp, forgotPassword;
+    String token;
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -111,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                             else if(auth.getCurrentUser().isEmailVerified())
                             {
                                 Toast.makeText(LoginActivity.this, "Sign in successful", Toast.LENGTH_SHORT).show();
+
                                 Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
                                 startActivity(intent);
                                 finish();

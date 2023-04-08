@@ -53,6 +53,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import java.sql.Timestamp;
@@ -86,6 +87,8 @@ public class MainActivity2 extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
     Menu menuView;
+
+    String token;
     MenuItem signIn,signUp,logout;
 
     @Override
@@ -95,6 +98,22 @@ public class MainActivity2 extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
         navigationDrawerIcon = findViewById(R.id.navigationDrawerIcon);
+
+//        FirebaseMessaging.getInstance().getToken()
+//                .addOnCompleteListener(new OnCompleteListener<String>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<String> task) {
+//                        if (!task.isSuccessful()) {
+//                            // Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+//                            return;
+//                        }
+//
+//                        // Get new FCM registration token
+//                        token = task.getResult();
+//                        reference.child("Tokens").push().setValue(token);
+//                        System.out.println("*****************"+token);
+//                    }
+//                });
 
         View view = navigationView.getHeaderView(0);
         menuView = navigationView.getMenu();
