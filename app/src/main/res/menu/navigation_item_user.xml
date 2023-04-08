@@ -24,16 +24,21 @@
     <item
         android:id="@+id/myArticleNavDrawer"
         android:title="My Article"
-        android:icon="@drawable/baseline_logout_24"/>
+        android:icon="@drawable/baseline_article_24"/>
 
     <item
         android:id="@+id/userProfileNavDrawer"
         android:title="Profile"
-        android:icon="@drawable/baseline_logout_24"/>
+        android:icon="@drawable/baseline_person_24"/>
+
+    <item
+        android:id="@+id/changePasswordNavDrawer"
+        android:title="Change Password"
+        android:icon="@drawable/baseline_password_24"/>
 
     <item
         android:id="@+id/rejectedArticleNavDrawer"
         android:title="Rejected Articles"
-        android:icon="@drawable/baseline_logout_24"/>
+        android:icon="@drawable/baseline_cancel_presentation_24"/>
 
 </menu>
