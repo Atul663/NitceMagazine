@@ -53,9 +53,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -65,7 +63,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity2 extends AppCompatActivity {
@@ -116,7 +113,11 @@ public class MainActivity2 extends AppCompatActivity {
 //                });
 
         View view = navigationView.getHeaderView(0);
+
+
         menuView = navigationView.getMenu();
+
+
 
         emailId = view.findViewById(R.id.textViewEmailNavDrawer);
         role = view.findViewById(R.id.textViewRoleNavDrawer);
@@ -240,6 +241,14 @@ public class MainActivity2 extends AppCompatActivity {
                 } else if (id == R.id.rejectedArticleNavDrawer) {
                     Intent intent = new Intent(MainActivity2.this, RejectedArticle.class);
                     startActivity(intent);
+                }
+                else if(id ==R.id.contact){
+                    String email = "enitc10@gmail.com";
+                    String[] recipients = new String[]{email};
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/html");
+                    intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+                    startActivity(Intent.createChooser(intent, "Choose Email Client"));
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);
