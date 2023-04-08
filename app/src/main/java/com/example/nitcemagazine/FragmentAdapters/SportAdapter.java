@@ -112,6 +112,7 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder> 
             public void onClick(View v) {
                 Intent intent = new Intent(articleContext, ViewArticle.class);
                 intent.putExtra("ArticleIdIntent",id);
+                intent.putExtra("AuthorName",holder.authorName.getText().toString());
                 articleContext.startActivity(intent);
             }
         });

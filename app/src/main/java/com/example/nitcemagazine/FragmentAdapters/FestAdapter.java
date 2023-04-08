@@ -117,6 +117,7 @@ public class FestAdapter extends RecyclerView.Adapter<FestAdapter.ViewHolder> {
             public void onClick(View v) {
                 Intent intent = new Intent(articleContext, ViewArticle.class);
                 intent.putExtra("ArticleIdIntent",id);
+                intent.putExtra("AuthorName",holder.authorName.getText().toString());
                 articleContext.startActivity(intent);
             }
         });

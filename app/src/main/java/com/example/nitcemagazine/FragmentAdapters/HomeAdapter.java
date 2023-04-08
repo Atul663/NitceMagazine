@@ -49,12 +49,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         try {
 
-            System.out.println(articleList.get(position).getId());
+//            System.out.println(articleList.get(position).getId());
         String id = articleList.get(position).getId();
-        System.out.println(articleList.get(position).getImg());
-            reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
+//        System.out.println(articleList.get(position).getImg());
+            reference.child("PostedArticle").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    System.out.println(snapshot.child("title").getValue().toString());
+
                     String title = snapshot.child("title").getValue().toString();
                     String desc = snapshot.child("description").getValue().toString();
                     String img = snapshot.child("ArticleImage").getValue().toString();
@@ -114,6 +116,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                 public void onClick(View v) {
                     Intent intent = new Intent(articleContext, ViewArticle.class);
                     intent.putExtra("ArticleIdIntent",id);
+                    intent.putExtra("AuthorName",holder.authorName.getText().toString());
                     articleContext.startActivity(intent);
                 }
             });

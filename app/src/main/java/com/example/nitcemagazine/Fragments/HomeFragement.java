@@ -40,8 +40,9 @@ public class HomeFragement extends Fragment {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
     ModelClass modelClass = new ModelClass();
-
-    String authorName=new String();
+    SearchView searchView;
+    List<String > authorName ;
+//    String authorName=new String();
 
     @Nullable
     @Override
@@ -77,6 +78,7 @@ public class HomeFragement extends Fragment {
                     articleList.add(modelClass);
                     modelClass.setId(snapshot.getKey());
                     adapter.notifyDataSetChanged();
+                    searchView.setVisibility(View.VISIBLE);
                 }
 
 
@@ -110,7 +112,7 @@ public class HomeFragement extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.search_bar,menu);
         MenuItem item=menu.findItem(R.id.search_bar);
-        SearchView searchView=(SearchView)item.getActionView();
+        searchView=(SearchView)item.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -120,7 +122,10 @@ public class HomeFragement extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                txtSearch(newText);
+                if(newText.length() == 0)
+                    getArticle();
+                else
+                    txtSearch(newText);
                 return false;
             }
         });
@@ -129,24 +134,34 @@ public class HomeFragement extends Fragment {
     private void txtSearch(String str){
         List<ModelClass> articleList2=new ArrayList<>();
 
-
+        authorName = new ArrayList<>();
         reference.child("PostedArticle").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                modelClass = snapshot.getValue(ModelClass.class);
                 String cat = snapshot.child("category").getValue().toString();
                 //
-                /*String auid=modelClass.getAuthorUid();
+                String auid=snapshot.child("authorUid").getValue().toString();
 
-                reference.child("UserType").child(auid).addValueEventListener(new ValueEventListener() {
+
+                reference.child("UserType").child(auid).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String usertype = snapshot.getValue().toString();
-                        reference.child(usertype).child(auid).addValueEventListener(new ValueEventListener() {
+                    public void onDataChange(@NonNull DataSnapshot snapshot1) {
+                        String usertype = snapshot1.getValue().toString();
+                        reference.child(usertype).child(auid).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            public void onDataChange(@NonNull DataSnapshot snapshot2) {
 
-                                authorName=snapshot.child("name").getValue().toString();
+//                                authorName.add(snapshot.child("name").getValue().toString());
+
+                                modelClass = snapshot.getValue(ModelClass.class);
+
+                                if(modelClass.getCategory().equalsIgnoreCase("home") && (snapshot2.child("name").getValue().toString().toLowerCase().contains(str.toLowerCase()))) {
+                                    System.out.println(modelClass.getTitle());
+
+                                    articleList2.add(modelClass);
+                                    modelClass.setId(snapshot.getKey());
+                                    adapter.notifyDataSetChanged();
+                                }
 
                             }
 
@@ -161,14 +176,17 @@ public class HomeFragement extends Fragment {
                     public void onCancelled(@NonNull DatabaseError error) {
 
                     }
-                });*/
+                });
+                modelClass = snapshot.getValue(ModelClass.class);
 
                 //
-                if(modelClass.getCategory().equalsIgnoreCase("home") && (modelClass.getTitle().toLowerCase().contains(str.toLowerCase()) || authorName.toLowerCase().contains(str.toLowerCase()))) {
+                if(modelClass.getCategory().equalsIgnoreCase("home") && (modelClass.getTitle().toLowerCase().contains(str.toLowerCase()))) {
+                    System.out.println(modelClass.getTitle());
                     articleList2.add(modelClass);
                     modelClass.setId(snapshot.getKey());
                     adapter.notifyDataSetChanged();
                 }
+
             }
 
             @Override
@@ -195,4 +213,78 @@ public class HomeFragement extends Fragment {
         adapter = new HomeAdapter(articleList2, getContext());
         recyclerView.setAdapter(adapter);
     }
+
+    public void removeSearchBar()
+    {
+        searchView.setVisibility(View.GONE);
+    }
 }
+//
+
+//
+//        reference.child("PostedArticle").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshotx) {
+//
+//                for (DataSnapshot snapshot : snapshotx.getChildren())
+//                {
+////                String cat = snapshot.child("category").getValue().toString();
+//                //
+//                String auid = snapshot.child("authorUid").getValue().toString();
+//
+//
+//                reference.child("UserType").child(auid).addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot1) {
+//                        String usertype = snapshot1.getValue().toString();
+//                        reference.child(usertype).child(auid).addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot2) {
+//
+////                                authorName.add(snapshot.child("name").getValue().toString());
+//
+//                                modelClass = snapshot.getValue(ModelClass.class);
+//
+//                                if (modelClass.getCategory().equalsIgnoreCase("home"))// && (snapshot2.child("name").getValue().toString().toLowerCase().contains(str.toLowerCase())))
+//                                     {
+//                                    System.out.println(modelClass.getCategory() +" " + modelClass.getTitle());
+//
+//                                    articleList2.add(modelClass);
+//                                    modelClass.setId(snapshot.getKey());
+//                                    adapter.notifyDataSetChanged();
+//                                         adapter = new HomeAdapter(articleList2, getContext());
+//                                         recyclerView.setAdapter(adapter);
+//                                }
+//
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
+//
+//                //
+//                if (modelClass.getCategory().equalsIgnoreCase("home") && (modelClass.getTitle().toLowerCase().contains(str.toLowerCase()))) {
+//                    System.out.println(modelClass.getTitle());
+//                    articleList2.add(modelClass);
+//                    modelClass.setId(snapshot.getKey());
+//                    adapter.notifyDataSetChanged();
+//                    adapter = new HomeAdapter(articleList2, getContext());
+//                    recyclerView.setAdapter(adapter);
+//                }
+//            }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });

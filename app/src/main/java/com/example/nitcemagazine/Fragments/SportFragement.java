@@ -26,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,17 +122,59 @@ public class SportFragement extends Fragment {
     }
     private void txtSearch(String str){
         List<ModelClass> articleList2=new ArrayList<>();
+
+
         reference.child("PostedArticle").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                modelClass = snapshot.getValue(ModelClass.class);
                 String cat = snapshot.child("category").getValue().toString();
-                if(modelClass.getCategory().equalsIgnoreCase("sport") && modelClass.getTitle().toLowerCase().contains(str.toLowerCase())) {
+                //
+                String auid=snapshot.child("authorUid").getValue().toString();
+
+
+                reference.child("UserType").child(auid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot1) {
+                        String usertype = snapshot1.getValue().toString();
+                        reference.child(usertype).child(auid).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot2) {
+
+//                                authorName.add(snapshot.child("name").getValue().toString());
+
+                                modelClass = snapshot.getValue(ModelClass.class);
+
+                                if(modelClass.getCategory().equalsIgnoreCase("sport") && (snapshot2.child("name").getValue().toString().toLowerCase().contains(str.toLowerCase()))) {
+                                    System.out.println(modelClass.getTitle());
+
+                                    articleList2.add(modelClass);
+                                    modelClass.setId(snapshot.getKey());
+                                    adapter.notifyDataSetChanged();
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                modelClass = snapshot.getValue(ModelClass.class);
+
+                //
+                if(modelClass.getCategory().equalsIgnoreCase("sport") && (modelClass.getTitle().toLowerCase().contains(str.toLowerCase()))) {
+                    System.out.println(modelClass.getTitle());
                     articleList2.add(modelClass);
                     modelClass.setId(snapshot.getKey());
                     adapter.notifyDataSetChanged();
                 }
-
 
             }
 

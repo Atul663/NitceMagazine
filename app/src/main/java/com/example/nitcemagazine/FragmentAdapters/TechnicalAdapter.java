@@ -109,6 +109,7 @@ public class TechnicalAdapter extends RecyclerView.Adapter<TechnicalAdapter.View
                 public void onClick(View v) {
                     Intent intent = new Intent(articleContext, ViewArticle.class);
                     intent.putExtra("ArticleIdIntent", id);
+                    intent.putExtra("AuthorName",holder.authorName.getText().toString());
                     articleContext.startActivity(intent);
                 }
             });

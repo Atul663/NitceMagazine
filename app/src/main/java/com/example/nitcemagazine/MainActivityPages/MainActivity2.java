@@ -505,42 +505,46 @@ public class MainActivity2 extends AppCompatActivity {
 //        String time = sdf.format(timeStamp);
         if(user1 != null)
         {
-            reference1.child("RejectedArticle").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        if (ds.child("authorUid").getValue().toString().equals(user1.getUid())) {
-                            Long time = (Long) ds.child("DateTime").getValue();
-                            try {
-                                String date1 = sdf.format(time);
-                                System.out.println(date1);
-                                Long timeStamp = new Date().getTime();
-                                String dt2 = sdf.format(timeStamp);
+            if(user1.isEmailVerified()) {
+                reference1.child("RejectedArticle").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            if (ds.child("authorUid").getValue().toString().equals(user1.getUid())) {
+                                Long time = (Long) ds.child("DateTime").getValue();
+                                try {
+                                    String date1 = sdf.format(time);
+                                    System.out.println(date1);
+                                    Long timeStamp = new Date().getTime();
+                                    String dt2 = sdf.format(timeStamp);
 
 
-                                Date date = dtf.parse(date1);
-                                Date date2 = dtf.parse(dt2);
-                                long diff = date2.getTime() - date.getTime();
-                                int day = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                                System.out.println("min: " + TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS));
+                                    Date date = dtf.parse(date1);
+                                    Date date2 = dtf.parse(dt2);
+                                    long diff = date2.getTime() - date.getTime();
+                                    int day = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                                    System.out.println("min: " + TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS));
 
-                                if (day >= 7) {
-                                    reference.child("RejectedArticle").child(ds.getKey()).removeValue();
+                                    if (day >= 7) {
+                                        reference.child("RejectedArticle").child(ds.getKey()).removeValue();
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println(e);
                                 }
-                            } catch (Exception e) {
-                                System.out.println(e);
                             }
                         }
                     }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
+                    }
+                });
 
-
+            }
+            else {
+                auth1.signOut();
+            }
         }
         super.onStart();
 
