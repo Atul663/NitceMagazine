@@ -89,7 +89,7 @@ public class MainActivity2 extends AppCompatActivity {
     Menu menuView;
 
     String token;
-    MenuItem signIn,signUp,logout;
+    MenuItem signIn,signUp,logout,myarticle,rejectedArticle,changePassword,Profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -346,6 +346,10 @@ public class MainActivity2 extends AppCompatActivity {
         signIn = menuView.findItem(R.id.signInNavDrawer);
         signUp = menuView.findItem(R.id.signUpNavDrawer);
         logout = menuView.findItem(R.id.logoutNavDrawer);
+        myarticle = menuView.findItem(R.id.myArticleNavDrawer);
+        rejectedArticle = menuView.findItem(R.id.rejectedArticleNavDrawer);
+        changePassword = menuView.findItem(R.id.changePasswordNavDrawer);
+        Profile =menuView.findItem(R.id.userProfileNavDrawer);
         if(user != null) {
             signIn.setVisible(false);
             signUp.setVisible(false);
@@ -355,6 +359,10 @@ public class MainActivity2 extends AppCompatActivity {
             signIn.setVisible(true);
             signUp.setVisible(true);
             logout.setVisible(false);
+            myarticle.setVisible(false);
+            rejectedArticle.setVisible(false);
+            changePassword.setVisible(false);
+            Profile.setVisible(false);
         }
     }
 

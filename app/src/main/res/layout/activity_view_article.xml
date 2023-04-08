@@ -32,11 +32,37 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="19dp"
                 android:minHeight="300dp"
-                app:layout_constraintBottom_toTopOf="@+id/TitleArticleView"
+                app:layout_constraintBottom_toTopOf="@+id/likeButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+
+            <Button
+                android:id="@+id/likeButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintBottom_toTopOf="@+id/TitleArticleView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.05"
+                android:background="@drawable/baseline_favorite_24"
+                />
+
+            <TextView
+                android:id="@+id/likeno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="likes"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/TitleArticleView"
+                app:layout_constraintHorizontal_bias="0.05"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/likeButton" />
 
             <TextView
                 android:id="@+id/TitleArticleView"
@@ -50,6 +76,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/articleImageArticleView" />
+
+
 
             <TextView
                 android:id="@+id/articleTextArticleView"

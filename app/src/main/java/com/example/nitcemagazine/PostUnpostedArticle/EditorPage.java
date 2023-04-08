@@ -48,6 +48,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -170,9 +171,9 @@ public class EditorPage extends AppCompatActivity {
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mesg = "Hi,\nWe are sorry to inform you that the post requested by you has been rejected due to following reason:\n";
-                        String reason = msg.getText().toString();
-                        if (!reason.isEmpty()) {
+                        mesg="Hi,\nWe are sorry to inform you that the post requested by you '"+articletitle.getText()+"' has been rejected due to following reason:\n";
+                        String reason=msg.getText().toString();
+                        if(!reason.isEmpty()) {
                             //
                             Long timeStamp = new Date().getTime();
                             Map<String, Object> map = new HashMap<>();
@@ -204,7 +205,7 @@ public class EditorPage extends AppCompatActivity {
                                     });
 
                             //Send Email
-                            mesg = mesg + reason + "\nIf you don't repost the article within 15 days your article will be permanently deleted.\n\n" + articletitle.getText() + "\nThanks and Regards,\nNITC_E_MAGAZINE.";
+                            mesg = mesg + reason+"\nIf you don't repost the article within 15 days your article will be permanently deleted.\n\nThanks and Regards,\nNITC_E_MAGAZINE.";
                             dbreference.child("UserType").child(author).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -270,6 +271,14 @@ public class EditorPage extends AppCompatActivity {
                                 //delete from review Table
                                 dbreference.child("Review").child(ArticleId).removeValue();
 
+                                //Enter Empty Liker List in Like Table
+                                ArrayList<String> lk=new ArrayList<String>();
+                                DatabaseReference ref=dbreference.child("Like").child(ArticleId);
+                                Map<String,Object> map=new HashMap<>();
+                                map.put("articleid",ArticleId);
+                                map.put("likers",lk);
+                                ref.setValue(map);
+
 
 //Notification new
 
@@ -318,7 +327,7 @@ public class EditorPage extends AppCompatActivity {
                                 intent.setType("text/html");
                                 intent.putExtra(Intent.EXTRA_EMAIL, recipients);
                                 intent.putExtra(Intent.EXTRA_SUBJECT, "Your Post has been posted");
-                                String msg = "Hi,\n This email is to inform you that the post requested by you has been posted on the basis on good reviews.Now you can check your post on our Article page by logging into the app.\n\n" + articletitle.getText() + " Thanks and Regards,\nNITC_E_MAGAZINE.";
+                                String msg="Hi,\n This email is to inform you that the post requested by you '"+articletitle.getText()+"' has been posted on the basis on good reviews.Now you can check your post on our Article page by logging into the app.\n\n Thanks and Regards,\nNITC_E_MAGAZINE.";
                                 intent.putExtra(Intent.EXTRA_TEXT, msg);
                                 startActivity(Intent.createChooser(intent, "Choose Email Client"));
 

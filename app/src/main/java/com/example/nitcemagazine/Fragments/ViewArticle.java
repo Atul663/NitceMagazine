@@ -59,7 +59,6 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfDocument;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -84,7 +83,7 @@ public class ViewArticle extends AppCompatActivity {
     ArrayList <String > imgfile = new ArrayList<>();
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
-    FirebaseUser user ;
+    FirebaseUser user= auth.getCurrentUser();
     private static final int STORAGE_CODE = 1000;
 
     List<CommentModelClass> commentList;
@@ -97,11 +96,19 @@ public class ViewArticle extends AppCompatActivity {
     EditText username,password;
     Button signin;
 
+    int count;
+
+    Button like;
+    TextView likeno;
+
     Bitmap bmp, scaledBmp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_article);
+
+        like=findViewById(R.id.likeButton);
+        likeno=findViewById(R.id.likeno);
 
         articelTitle = findViewById(R.id.TitleArticleView);
         articleDesc = findViewById(R.id.articleTextArticleView);
@@ -122,6 +129,73 @@ public class ViewArticle extends AppCompatActivity {
         id = getIntent().getStringExtra("ArticleIdIntent");
 
         getComment();
+
+        //get article info and set like button and like nos
+        DatabaseReference likers_ref=reference.child("Like").child(id).child("likers");
+        likers_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String>  l=new ArrayList<String>();
+                for (DataSnapshot childsnapshot:snapshot.getChildren()){
+                    String r_id=childsnapshot.getValue().toString();
+                    l.add(r_id);
+                }
+                count=l.size();
+                likeno.setText(count+" likes");
+                if(user==null){
+                    like.setBackgroundResource(R.drawable.baseline_favorite_border_24);
+                    like.setEnabled(false);
+                }
+                else {
+                    if (l.contains(user.getUid())) {
+                        like.setBackgroundResource(R.drawable.baseline_favorite_24);
+                    } else {
+                        like.setBackgroundResource(R.drawable.baseline_favorite_border_24);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                like.setBackgroundResource(R.drawable.baseline_favorite_border_24);
+                likeno.setText(0+" likes");
+            }
+        });
+
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                likers_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<String>  l=new ArrayList<String>();
+                        for (DataSnapshot childsnapshot:snapshot.getChildren()){
+                            String r_id=childsnapshot.getValue().toString();
+                            l.add(r_id);
+                        }
+                        if(l.contains(user.getUid())){
+                            l.remove(user.getUid());
+                            count=l.size();
+                            likeno.setText(count+" likes");
+                            likers_ref.setValue(l);
+                            like.setBackgroundResource(R.drawable.baseline_favorite_border_24);
+                        }
+                        else{
+                            l.add(user.getUid());
+                            count=l.size();
+                            likeno.setText(count+" likes");
+                            likers_ref.setValue(l);
+                            like.setBackgroundResource(R.drawable.baseline_favorite_24);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
 
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,7 +320,6 @@ public class ViewArticle extends AppCompatActivity {
                 commentModelClass = snapshot.getValue(CommentModelClass.class);
                 commentList.add(commentModelClass);
                 adapter.notifyDataSetChanged();
-
             }
 
             @Override

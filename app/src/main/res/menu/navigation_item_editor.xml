@@ -12,9 +12,24 @@
         android:icon="@drawable/baseline_app_registration_24"/>
 
     <item
+        android:id="@+id/userProfileNavDrawer"
+        android:title="Profile"
+        android:icon="@drawable/baseline_person_24"/>
+
+    <item
         android:id="@+id/addPostNavDrawer"
         android:title="Add Post"
         android:icon="@drawable/baseline_post_add_24"/>
+
+    <item
+        android:id="@+id/myArticleNavDrawer"
+        android:title="My Article"
+        android:icon="@drawable/baseline_article_24"/>
+
+    <item
+        android:id="@+id/rejectedArticleNavDrawer"
+        android:title="Rejected Articles"
+        android:icon="@drawable/baseline_cancel_presentation_24"/>
 
     <item
         android:id="@+id/postArticleNavDrawer"
@@ -26,25 +41,15 @@
         android:title="Delete Article"
         android:icon="@drawable/baseline_delete_24"/>
 
+    <item
+        android:id="@+id/changePasswordNavDrawer"
+        android:title="Change Password"
+        android:icon="@drawable/baseline_password_24"/>
 
     <item
         android:id="@+id/logoutNavDrawer"
         android:title="Logout"
         android:icon="@drawable/baseline_logout_24"/>
 
-    <item
-        android:id="@+id/myArticleNavDrawer"
-        android:title="My Article"
-        android:icon="@drawable/baseline_logout_24"/>
-
-    <item
-        android:id="@+id/userProfileNavDrawer"
-        android:title="Profile"
-        android:icon="@drawable/baseline_logout_24"/>
-
-    <item
-        android:id="@+id/rejectedArticleNavDrawer"
-        android:title="Rejected Articles"
-        android:icon="@drawable/baseline_logout_24"/>
 
 </menu>
