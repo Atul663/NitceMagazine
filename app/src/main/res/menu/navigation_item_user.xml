@@ -55,7 +55,6 @@
             <item
                 android:id="@+id/contact"
                 android:title="enitc10@gmail.com"
-                android:icon="@drawable/baseline_mail_24"
                 />
         </menu>
     </item>
