@@ -54,7 +54,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -64,7 +63,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity2 extends AppCompatActivity {
@@ -86,7 +84,9 @@ public class MainActivity2 extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
     Menu menuView;
-    MenuItem signIn,signUp,logout;
+
+    String token;
+    MenuItem signIn,signUp,logout,myarticle,rejectedArticle,changePassword,Profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +96,28 @@ public class MainActivity2 extends AppCompatActivity {
         navigationView = findViewById(R.id.navigationView);
         navigationDrawerIcon = findViewById(R.id.navigationDrawerIcon);
 
+//        FirebaseMessaging.getInstance().getToken()
+//                .addOnCompleteListener(new OnCompleteListener<String>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<String> task) {
+//                        if (!task.isSuccessful()) {
+//                            // Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+//                            return;
+//                        }
+//
+//                        // Get new FCM registration token
+//                        token = task.getResult();
+//                        reference.child("Tokens").push().setValue(token);
+//                        System.out.println("*****************"+token);
+//                    }
+//                });
+
         View view = navigationView.getHeaderView(0);
+
+
         menuView = navigationView.getMenu();
+
+
 
         emailId = view.findViewById(R.id.textViewEmailNavDrawer);
         role = view.findViewById(R.id.textViewRoleNavDrawer);
@@ -206,6 +226,7 @@ public class MainActivity2 extends AppCompatActivity {
                 } else if (id == R.id.deleteArticleNavDrawer) {
                     Intent intent = new Intent(MainActivity2.this, DeleteArticle.class);
                     startActivity(intent);
+                    finish();
                 } else if (id == R.id.removeReviewerNavDrawer) {
                     Intent intent = new Intent(MainActivity2.this, DeleteReviewer.class);
                     startActivity(intent);
@@ -221,6 +242,14 @@ public class MainActivity2 extends AppCompatActivity {
                 } else if (id == R.id.rejectedArticleNavDrawer) {
                     Intent intent = new Intent(MainActivity2.this, RejectedArticle.class);
                     startActivity(intent);
+                }
+                else if(id ==R.id.contact){
+                    String email = "enitc10@gmail.com";
+                    String[] recipients = new String[]{email};
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/html");
+                    intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+                    startActivity(Intent.createChooser(intent, "Choose Email Client"));
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);
@@ -327,6 +356,10 @@ public class MainActivity2 extends AppCompatActivity {
         signIn = menuView.findItem(R.id.signInNavDrawer);
         signUp = menuView.findItem(R.id.signUpNavDrawer);
         logout = menuView.findItem(R.id.logoutNavDrawer);
+        myarticle = menuView.findItem(R.id.myArticleNavDrawer);
+        rejectedArticle = menuView.findItem(R.id.rejectedArticleNavDrawer);
+        changePassword = menuView.findItem(R.id.changePasswordNavDrawer);
+        Profile =menuView.findItem(R.id.userProfileNavDrawer);
         if(user != null) {
             signIn.setVisible(false);
             signUp.setVisible(false);
@@ -336,6 +369,10 @@ public class MainActivity2 extends AppCompatActivity {
             signIn.setVisible(true);
             signUp.setVisible(true);
             logout.setVisible(false);
+            myarticle.setVisible(false);
+            rejectedArticle.setVisible(false);
+            changePassword.setVisible(false);
+            Profile.setVisible(false);
         }
     }
 
@@ -478,42 +515,46 @@ public class MainActivity2 extends AppCompatActivity {
 //        String time = sdf.format(timeStamp);
         if(user1 != null)
         {
-            reference1.child("RejectedArticle").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        if (ds.child("authorUid").getValue().toString().equals(user1.getUid())) {
-                            Long time = (Long) ds.child("DateTime").getValue();
-                            try {
-                                String date1 = sdf.format(time);
-                                System.out.println(date1);
-                                Long timeStamp = new Date().getTime();
-                                String dt2 = sdf.format(timeStamp);
+            if(user1.isEmailVerified()) {
+                reference1.child("RejectedArticle").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            if (ds.child("authorUid").getValue().toString().equals(user1.getUid())) {
+                                Long time = (Long) ds.child("DateTime").getValue();
+                                try {
+                                    String date1 = sdf.format(time);
+                                    System.out.println(date1);
+                                    Long timeStamp = new Date().getTime();
+                                    String dt2 = sdf.format(timeStamp);
 
 
-                                Date date = dtf.parse(date1);
-                                Date date2 = dtf.parse(dt2);
-                                long diff = date2.getTime() - date.getTime();
-                                int day = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                                System.out.println("min: " + TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS));
+                                    Date date = dtf.parse(date1);
+                                    Date date2 = dtf.parse(dt2);
+                                    long diff = date2.getTime() - date.getTime();
+                                    int day = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                                    System.out.println("min: " + TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS));
 
-                                if (day >= 7) {
-                                    reference.child("RejectedArticle").child(ds.getKey()).removeValue();
+                                    if (day >= 7) {
+                                        reference.child("RejectedArticle").child(ds.getKey()).removeValue();
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println(e);
                                 }
-                            } catch (Exception e) {
-                                System.out.println(e);
                             }
                         }
                     }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
+                    }
+                });
 
-
+            }
+            else {
+                auth1.signOut();
+            }
         }
         super.onStart();
 

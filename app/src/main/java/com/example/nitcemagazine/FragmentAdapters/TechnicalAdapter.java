@@ -50,7 +50,7 @@ public class TechnicalAdapter extends RecyclerView.Adapter<TechnicalAdapter.View
         try {
 
         String id = articleList.get(position).getId();
-        reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
+        reference.child("PostedArticle").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String title = snapshot.child("title").getValue().toString();
@@ -62,7 +62,7 @@ public class TechnicalAdapter extends RecyclerView.Adapter<TechnicalAdapter.View
 
                     DatabaseReference ref = database.getReference();
                     DatabaseReference ref1 = database.getReference();
-                    ref1.child("UserType").child(uid).addValueEventListener(new ValueEventListener() {
+                    ref1.child("UserType").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             String roleOfUser = snapshot.getValue().toString();
@@ -109,6 +109,7 @@ public class TechnicalAdapter extends RecyclerView.Adapter<TechnicalAdapter.View
                 public void onClick(View v) {
                     Intent intent = new Intent(articleContext, ViewArticle.class);
                     intent.putExtra("ArticleIdIntent", id);
+                    intent.putExtra("AuthorName",holder.authorName.getText().toString());
                     articleContext.startActivity(intent);
                 }
             });

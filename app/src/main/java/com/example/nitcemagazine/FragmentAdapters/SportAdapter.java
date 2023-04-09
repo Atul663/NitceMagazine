@@ -49,7 +49,7 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder> 
         try {
 
         String id = articleList.get(position).getId();
-        reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
+        reference.child("PostedArticle").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String title = snapshot.child("title").getValue().toString();
@@ -112,6 +112,7 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder> 
             public void onClick(View v) {
                 Intent intent = new Intent(articleContext, ViewArticle.class);
                 intent.putExtra("ArticleIdIntent",id);
+                intent.putExtra("AuthorName",holder.authorName.getText().toString());
                 articleContext.startActivity(intent);
             }
         });

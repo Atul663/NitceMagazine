@@ -121,54 +121,86 @@ public class EductionalFragement extends Fragment {
         });
         super.onCreateOptionsMenu(menu, inflater);
     }
-    private void txtSearch(String str){
-        List<ModelClass> articleList2=new ArrayList<>();
-        reference.child("PostedArticle").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                modelClass = snapshot.getValue(ModelClass.class);
-                modelClass.setUid(snapshot.child("authorUid").getValue().toString());
-//                System.out.println("+++++++++++++++++++"+modelClass.getUid());
-                String auid=snapshot.child("authorUid").getValue().toString();
-                System.out.println("*"+auid);
+private void txtSearch(String str){
+    List<ModelClass> articleList2=new ArrayList<>();
+
+    reference.child("PostedArticle").addChildEventListener(new ChildEventListener() {
+        @Override
+        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            String cat = snapshot.child("category").getValue().toString();
+            //
+            String auid=snapshot.child("authorUid").getValue().toString();
 
 
-                String cat = snapshot.child("category").getValue().toString();
+            reference.child("UserType").child(auid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot1) {
+                    String usertype = snapshot1.getValue().toString();
+                    reference.child(usertype).child(auid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot2) {
 
-                if(modelClass.getCategory().equalsIgnoreCase("educational") && modelClass.getTitle().toLowerCase().contains(str.toLowerCase())) {
-                    articleList2.add(modelClass);
-                    modelClass.setId(snapshot.getKey());
-                    adapter.notifyDataSetChanged();
-                } /*else if (modelClass.getCategory().equalsIgnoreCase("educational") && modelClass.getAuthorName().toLowerCase().contains(str.toLowerCase())) {
-                    articleList2.add(modelClass);
-                    modelClass.setId(snapshot.getKey());
-                    adapter.notifyDataSetChanged();
-                }*/
+//                                authorName.add(snapshot.child("name").getValue().toString());
+
+                            modelClass = snapshot.getValue(ModelClass.class);
+
+                            if(modelClass.getCategory().equalsIgnoreCase("educational") && (snapshot2.child("name").getValue().toString().toLowerCase().contains(str.toLowerCase()))) {
+                                System.out.println(modelClass.getTitle());
+
+                                articleList2.add(modelClass);
+                                modelClass.setId(snapshot.getKey());
+                                adapter.notifyDataSetChanged();
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+            modelClass = snapshot.getValue(ModelClass.class);
+
+            //
+            if(modelClass.getCategory().equalsIgnoreCase("educational") && (modelClass.getTitle().toLowerCase().contains(str.toLowerCase()))) {
+                System.out.println(modelClass.getTitle());
+                articleList2.add(modelClass);
+                modelClass.setId(snapshot.getKey());
+                adapter.notifyDataSetChanged();
             }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+        }
 
-            }
+        @Override
+        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+        }
 
-            }
+        @Override
+        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+        }
 
-            }
+        @Override
+        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+        }
 
-            }
-        });
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
 
-        adapter = new EducationalAdapter(articleList2, getContext());
-        recyclerView.setAdapter(adapter);
-    }
+        }
+    });
+
+    adapter = new EducationalAdapter(articleList2, getContext());
+    recyclerView.setAdapter(adapter);
+}
 }

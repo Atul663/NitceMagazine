@@ -28,7 +28,8 @@ public class PostUnpostedArticles extends AppCompatActivity {
     PostUnpostedArticleAdapter postUnpostedArticleAdapter;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = auth.getCurrentUser();
-    List<ModelClass> articleList;
+    List<ModelClass> articleList = new ArrayList<>();
+    List<ModelClass> articleList2 = new ArrayList<>();
     List<String > reviewCount;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -43,13 +44,14 @@ public class PostUnpostedArticles extends AppCompatActivity {
 
         unpostedArticle.setLayoutManager(new LinearLayoutManager(this));
 
-        articleList = new ArrayList<>();
 
         getArticle();
     }
 
     void getArticle()
     {
+
+
         reference.child("Article").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -69,7 +71,13 @@ public class PostUnpostedArticles extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                modelClass = snapshot.getValue(ModelClass.class);
+                if(!articleList.contains(modelClass)) {
+                    articleList.add(modelClass);
+                    modelClass.setId(snapshot.getKey());
 
+                }
+                postUnpostedArticleAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -85,6 +93,5 @@ public class PostUnpostedArticles extends AppCompatActivity {
         postUnpostedArticleAdapter = new PostUnpostedArticleAdapter(articleList, PostUnpostedArticles.this);
         unpostedArticle.setAdapter(postUnpostedArticleAdapter);
     }
-
 
 }

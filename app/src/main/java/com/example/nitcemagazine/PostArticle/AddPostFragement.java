@@ -5,12 +5,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.nitcemagazine.Fragments.HomeFragement;
 import com.example.nitcemagazine.MainActivityPages.MainActivity2;
 import com.example.nitcemagazine.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,6 +52,7 @@ public class AddPostFragement extends Fragment {
     Spinner autoCompleteTextView;
 
     boolean imgControl = false;
+    SearchView searchView;
     Uri imageUri;
     String key;
     String imageSelectedName;
@@ -69,6 +75,10 @@ public class AddPostFragement extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_post_fragement, container, false);
+
+
+//        HomeFragement hf = new HomeFragement();
+//        hf.removeSearchBar();
 
 //        signout = (TextView) view.findViewById(R.id.button2);
         autoCompleteTextView = (Spinner) view.findViewById(R.id.category);
@@ -94,7 +104,7 @@ public class AddPostFragement extends Fragment {
 
         arrayAdapter = new ArrayAdapter<String >(getActivity(),R.layout.category_drop_down_menu,item);
         autoCompleteTextView.setAdapter(arrayAdapter);
-
+//        searchView.setVisibility(View.GONE);
         autoCompleteTextView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -233,4 +243,5 @@ public class AddPostFragement extends Fragment {
             reference.child("Article").child(key).child("Article Image").setValue("null");
         }
     }
+
 }

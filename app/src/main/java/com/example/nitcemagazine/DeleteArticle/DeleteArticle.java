@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.nitcemagazine.FragmentAdapters.ModelClass;
+import com.example.nitcemagazine.MainActivityPages.MainActivity2;
 import com.example.nitcemagazine.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,7 +29,8 @@ public class DeleteArticle extends AppCompatActivity {
     DeleteArticleAdapter deleteArticleAdapter;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = auth.getCurrentUser();
-    List<ModelClass> articleList;
+    List<ModelClass> articleList = new ArrayList<>();
+    List<ModelClass> articleList2 = new ArrayList<>();
     List<String > reviewCount;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -71,6 +74,16 @@ public class DeleteArticle extends AppCompatActivity {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
+                modelClass = snapshot.getValue(ModelClass.class);
+                DatabaseReference ref = database.getReference();
+
+                if(!articleList.contains(modelClass)){
+                    articleList.add(modelClass);
+                    modelClass.setId(snapshot.getKey());
+                }
+
+
+                deleteArticleAdapter.notifyItemRemoved(0);
             }
 
             @Override
@@ -88,4 +101,11 @@ public class DeleteArticle extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(DeleteArticle.this, MainActivity2.class);
+        startActivity(intent);
+        finishAffinity();
+        super.onBackPressed();
+    }
 }

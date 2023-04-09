@@ -92,7 +92,7 @@ public class ViewArticle extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
-    String id;
+    String id,authorName;
     EditText username,password;
     Button signin;
 
@@ -127,6 +127,8 @@ public class ViewArticle extends AppCompatActivity {
 
 
         id = getIntent().getStringExtra("ArticleIdIntent");
+        authorName = getIntent().getStringExtra("AuthorName");
+
 
         getComment();
 
@@ -367,6 +369,8 @@ public class ViewArticle extends AppCompatActivity {
             Font fontSize_10 =  FontFactory.getFont(FontFactory.TIMES, 18f);
             Paragraph p = new Paragraph(title,fontSize_10);
             doc.add(p);
+            doc.add(new Paragraph("Author Name :- "+ authorName));
+            doc.add(new Paragraph("\n"));
             doc.add(new Paragraph(desc));
             doc.close();
 
