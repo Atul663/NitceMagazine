@@ -61,7 +61,7 @@ public class EducationalAdapter extends RecyclerView.Adapter<EducationalAdapter.
         try {
 
             String id = articleList.get(position).getId();
-            reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
+            reference.child("PostedArticle").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String title = snapshot.child("title").getValue().toString();
@@ -73,7 +73,7 @@ public class EducationalAdapter extends RecyclerView.Adapter<EducationalAdapter.
 
                     DatabaseReference ref = database.getReference();
                     DatabaseReference ref1 = database.getReference();
-                    ref1.child("UserType").child(uid).addValueEventListener(new ValueEventListener() {
+                    ref1.child("UserType").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             String roleOfUser = snapshot.getValue().toString();

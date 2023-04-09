@@ -1,13 +1,10 @@
 package com.example.nitcemagazine.PostUnpostedArticle;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Notification;
@@ -15,11 +12,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,20 +24,16 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.nitcemagazine.FcmNotificationsSender;
-import com.example.nitcemagazine.MainActivityPages.MainActivity2;
+import com.example.nitcemagazine.Notification.FcmNotificationsSender;
 import com.example.nitcemagazine.R;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
@@ -300,6 +290,9 @@ public class EditorPage extends AppCompatActivity {
 //                                FcmNotificationsSender notificationsSender = new FcmNotificationsSender("eInz2ebPSXaDOzQycLU-uq:APA91bF9Y4We87b6MEY4o9H-qYdbPe9m9Vj8Ka_aRJQ5UrwdROHbKSPHYIlLyQa0GhfPBKTOivaA-Ajfu_QQU3SkQZD6v6j2Ad_fO19GLJnn4fI52e4WzsV_bMBsF6i4jmTQttu0pJdF","hello","bye",getApplicationContext(),EditorPage.this);
 //
 //                                notificationsSender.SendNotifications();
+
+
+
 //Notification end
                             }
                         })
@@ -330,6 +323,10 @@ public class EditorPage extends AppCompatActivity {
                                 String msg="Hi,\n This email is to inform you that the post requested by you '"+articletitle.getText()+"' has been posted on the basis on good reviews.Now you can check your post on our Article page by logging into the app.\n\n Thanks and Regards,\nNITC_E_MAGAZINE.";
                                 intent.putExtra(Intent.EXTRA_TEXT, msg);
                                 startActivity(Intent.createChooser(intent, "Choose Email Client"));
+
+//                                Intent intents = new Intent(EditorPage.this, PostUnpostedArticles.class);
+//                                startActivity(intents);
+//                                finish();
 
                             }
 
@@ -381,4 +378,39 @@ public class EditorPage extends AppCompatActivity {
             compat.notify(1, builder.build());
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(EditorPage.this,PostUnpostedArticles.class);
+        startActivity(intent);
+        finish();
+        super.onBackPressed();
+    }
+
+//    @Override
+//    protected void onPostResume() {
+//        Intent intent = new Intent(EditorPage.this,PostUnpostedArticles.class);
+//        startActivity(intent);
+//        finish();
+//        super.onPostResume();
+//    }
+
+//    @Override
+//    protected void onRestart() {
+//        Intent intent = new Intent(EditorPage.this,PostUnpostedArticles.class);
+//        startActivity(intent);
+//        finish();
+//        super.onResume();
+//    }
+
+    @Override
+    protected void onRestart() {
+        Intent intent = new Intent(EditorPage.this,PostUnpostedArticles.class);
+        startActivity(intent);
+        finish();
+        super.onRestart();
+
+    }
+
+
 }

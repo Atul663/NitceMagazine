@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nitcemagazine.FragmentAdapters.ModelClass;
+import com.example.nitcemagazine.Fragments.ViewArticle;
 import com.example.nitcemagazine.MainActivityPages.MainActivity2;
 import com.example.nitcemagazine.PostUnpostedArticle.EditorPage;
 import com.example.nitcemagazine.R;
@@ -51,7 +52,8 @@ public class DeleteArticleAdapter extends RecyclerView.Adapter<DeleteArticleAdap
 
     @Override
     public void onBindViewHolder(@NonNull DeleteArticleAdapter.ViewHolder holder, int position) {
-        String id = articleList.get(position).getId();
+        int x = position;
+        String id = articleList.get(x).getId();
 
         reference.child("PostedArticle").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -111,8 +113,9 @@ public class DeleteArticleAdapter extends RecyclerView.Adapter<DeleteArticleAdap
         holder.articleCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(articleContext, EditorPage.class);
+                Intent intent = new Intent(articleContext, ViewArticle.class);
                 intent.putExtra("ArticleIdIntent",id);
+                intent.putExtra("AuthorName",holder.authorName.getText().toString());
                 articleContext.startActivity(intent);
             }
         });
@@ -128,7 +131,9 @@ public class DeleteArticleAdapter extends RecyclerView.Adapter<DeleteArticleAdap
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 reference.child("PostedArticle").child(id).removeValue();
-                                Intent intent = new Intent(articleContext, MainActivity2.class);
+
+
+                                Intent intent = new Intent(articleContext, DeleteArticle.class);
                                 articleContext.startActivity(intent);
                                 ((Activity)articleContext).finish();
                             }

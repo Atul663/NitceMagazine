@@ -1,4 +1,4 @@
-package com.example.nitcemagazine;
+package com.example.nitcemagazine.Notification;
 
 import android.app.Activity;
 import android.content.Context;

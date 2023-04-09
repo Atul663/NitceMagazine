@@ -52,7 +52,7 @@ public class FestAdapter extends RecyclerView.Adapter<FestAdapter.ViewHolder> {
 
             String id = articleList.get(position).getId();
 
-            reference.child("PostedArticle").child(id).addValueEventListener(new ValueEventListener() {
+            reference.child("PostedArticle").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String title = snapshot.child("title").getValue().toString();

@@ -226,6 +226,7 @@ public class MainActivity2 extends AppCompatActivity {
                 } else if (id == R.id.deleteArticleNavDrawer) {
                     Intent intent = new Intent(MainActivity2.this, DeleteArticle.class);
                     startActivity(intent);
+                    finish();
                 } else if (id == R.id.removeReviewerNavDrawer) {
                     Intent intent = new Intent(MainActivity2.this, DeleteReviewer.class);
                     startActivity(intent);

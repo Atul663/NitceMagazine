@@ -1,5 +1,6 @@
 package com.example.nitcemagazine.PostUnpostedArticle;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -109,6 +110,8 @@ public class PostUnpostedArticleAdapter extends RecyclerView.Adapter<PostUnposte
                 Intent intent = new Intent(articleContext, EditorPage.class);
                 intent.putExtra("ArticleIdIntent",id);
                 articleContext.startActivity(intent);
+                ((Activity)articleContext).finish();
+
             }
         });
 

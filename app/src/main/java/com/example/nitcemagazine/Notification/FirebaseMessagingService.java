@@ -1,4 +1,4 @@
-package com.example.nitcemagazine;
+package com.example.nitcemagazine.Notification;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;

@@ -73,7 +73,7 @@ public class HomeFragement extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 modelClass = snapshot.getValue(ModelClass.class);
-                String cat = snapshot.child("category").getValue().toString();
+//                String cat = snapshot.child("category").getValue().toString();
                 if(modelClass.getCategory().equalsIgnoreCase("home")) {
                     articleList.add(modelClass);
                     modelClass.setId(snapshot.getKey());
