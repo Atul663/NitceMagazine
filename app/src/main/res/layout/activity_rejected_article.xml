@@ -5,6 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RejectedArticle.RejectedArticle">
+    <ImageView
+        android:id="@+id/NITC_Logo_Background"
+        android:layout_width="0dp"
+        android:layout_height="609dp"
+        android:layout_marginTop="19dp"
+        android:alpha=".08"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/nitc" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewRejectedArticle"
