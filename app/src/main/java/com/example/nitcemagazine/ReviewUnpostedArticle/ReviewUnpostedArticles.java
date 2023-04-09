@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.example.nitcemagazine.FragmentAdapters.ModelClass;
+import com.example.nitcemagazine.MainActivityPages.MainActivity2;
 import com.example.nitcemagazine.PostUnpostedArticle.PostUnpostedArticleAdapter;
 import com.example.nitcemagazine.PostUnpostedArticle.PostUnpostedArticles;
 import com.example.nitcemagazine.R;
@@ -121,6 +123,7 @@ public class ReviewUnpostedArticles extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot childSnapshot : snapshot.getChildren()){
                     String key=childSnapshot.getKey();
+
                     if(unReviewedArticle.contains(key)){
                         modelClass = childSnapshot.getValue(ModelClass.class);
                         articleList.add(modelClass);
@@ -141,5 +144,11 @@ public class ReviewUnpostedArticles extends AppCompatActivity {
         unpostedArticle.setAdapter(reviewUnpostedArticleAdapter);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ReviewUnpostedArticles.this, MainActivity2.class);
+        startActivity(intent);
+        finish();
+        super.onBackPressed();
+    }
 }

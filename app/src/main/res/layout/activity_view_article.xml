@@ -39,10 +39,11 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/likeButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:contentDescription="like image"
                 app:layout_constraintBottom_toTopOf="@+id/TitleArticleView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,9 +55,10 @@
                 android:id="@+id/likeno"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:text="likes"
                 android:textSize="20dp"
+
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/TitleArticleView"
                 app:layout_constraintHorizontal_bias="0.05"
@@ -69,6 +71,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
+                android:textColor="@color/black"
                 android:text="ERA of Chatrapati Shivaji Maharaj"
                 android:textSize="40dp"
                 android:textStyle="bold"
@@ -94,7 +97,7 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/currentUserImageArticleView"
-                android:layout_width="50dp"
+                android:layout_width="30dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="8dp"

@@ -6,6 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".getStarted.splashScreen">
 
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/downloadButton"
+                android:layout_width="28dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:visibility="invisible"
+                android:layout_marginEnd="9dp"
+                android:layout_marginBottom="0dp"
+                android:src="@drawable/download_24" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/MAGe"
+                android:layout_margin="15dp"
+                android:text="@string/nitc_mag_e"
+                android:textColor="#03A9F4"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
     <ImageView
         android:id="@+id/imageViewSplash"
         android:layout_width="337dp"
@@ -13,8 +55,7 @@
         android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/toolBar" />
 
     <TextView
         android:id="@+id/textViewSplash"
@@ -22,6 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
         android:layout_marginBottom="96dp"
+        android:fontFamily="@font/calistoga"
         android:text="NITC MAG-E"
         android:textColor="#029DE3"
         android:textSize="48sp"

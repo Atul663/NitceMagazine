@@ -1,5 +1,6 @@
 package com.example.nitcemagazine.RejectedArticle;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -114,6 +115,7 @@ public class RejectedArticleAdapter extends RecyclerView.Adapter<RejectedArticle
                     Intent intent = new Intent(articleContext, RejectedArticleViewArticle.class);
                     intent.putExtra("ArticleIdIntent",id);
                     articleContext.startActivity(intent);
+                    ((Activity)articleContext).finish();
                 }
             });
 

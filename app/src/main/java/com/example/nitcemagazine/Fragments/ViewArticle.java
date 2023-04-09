@@ -75,7 +75,7 @@ import java.util.concurrent.Executors;
 
 public class ViewArticle extends AppCompatActivity {
     TextView articelTitle,articleDesc,comment;
-    ImageView articleImageCard,downloadButton;
+    ImageView articleImageCard,downloadButton,nav;
     Button addComment;
     RecyclerView commentRecyclerView;
     AlertDialog dialog;
@@ -117,9 +117,11 @@ public class ViewArticle extends AppCompatActivity {
         addComment = findViewById(R.id.buttonAddCommentArticleView);
         commentRecyclerView = findViewById(R.id.recyclerViewArticleView);
         downloadButton = findViewById(R.id.downloadButton);
+        nav = findViewById(R.id.navigationDrawerIcon);
 
 
         downloadButton.setVisibility(View.VISIBLE);
+        nav.setVisibility(View.GONE);
 
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -270,14 +272,16 @@ public class ViewArticle extends AppCompatActivity {
                 user = auth.getCurrentUser();
                 if(user != null) {
                     String commentText = comment.getText().toString();
+                    if(commentText.length() != 0) {
 
-                    DatabaseReference ref = database.getReference();
+                        DatabaseReference ref = database.getReference();
 
-                    String commentKey = ref.child("ArticleComment").child(id).push().getKey();
-                    CommentDetailClass commentDetailClass = new CommentDetailClass(commentText, auth.getCurrentUser().getUid(), id);
-                    ref.child("ArticleComment").child(id).child(commentKey).setValue(commentDetailClass);
+                        String commentKey = ref.child("ArticleComment").child(id).push().getKey();
+                        CommentDetailClass commentDetailClass = new CommentDetailClass(commentText, auth.getCurrentUser().getUid(), id);
+                        ref.child("ArticleComment").child(id).child(commentKey).setValue(commentDetailClass);
 
-                    comment.setText("");
+                        comment.setText("");
+                    }
                 }
                 else {
                     AlertDialog.Builder dialogLogin = new AlertDialog.Builder(ViewArticle.this);

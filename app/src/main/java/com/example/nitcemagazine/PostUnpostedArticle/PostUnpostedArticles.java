@@ -57,10 +57,11 @@ public class PostUnpostedArticles extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 modelClass = snapshot.getValue(ModelClass.class);
                 DatabaseReference ref = database.getReference();
-
-                articleList.add(modelClass);
-                modelClass.setId(snapshot.getKey());
-                postUnpostedArticleAdapter.notifyDataSetChanged();
+                if((Long)snapshot.child("reviewCount").getValue()>=1) {
+                    articleList.add(modelClass);
+                    modelClass.setId(snapshot.getKey());
+                    postUnpostedArticleAdapter.notifyDataSetChanged();
+                }
 
             }
 
@@ -72,7 +73,7 @@ public class PostUnpostedArticles extends AppCompatActivity {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 modelClass = snapshot.getValue(ModelClass.class);
-                if(!articleList.contains(modelClass)) {
+                if(!articleList.contains(modelClass) ) {
                     articleList.add(modelClass);
                     modelClass.setId(snapshot.getKey());
 

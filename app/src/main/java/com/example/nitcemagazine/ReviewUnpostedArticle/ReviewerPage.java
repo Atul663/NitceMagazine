@@ -3,6 +3,7 @@ package com.example.nitcemagazine.ReviewUnpostedArticle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nitcemagazine.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +42,8 @@ public class ReviewerPage extends AppCompatActivity {
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = auth.getCurrentUser();
-    int reviewCount=0;
+    Long reviewCount= Long.valueOf(0);
+    Long reviewCnt;
     float prevRating=0;
 
 
@@ -57,7 +61,7 @@ public class ReviewerPage extends AppCompatActivity {
 
         ArticleId = getIntent().getStringExtra("ArticleIdIntent");
 
-        dbreference.child("Article").child(ArticleId).addValueEventListener(new ValueEventListener() {
+        dbreference.child("Article").child(ArticleId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //get Values from database
@@ -68,8 +72,8 @@ public class ReviewerPage extends AppCompatActivity {
                 String content = snapshot.child("description").getValue(String.class);
                 String title = snapshot.child("title").getValue(String.class);
                 System.out.println(title);
-                String reviewCnt = snapshot.child("reviewCount").getValue().toString();
-                reviewCount =Integer.parseInt(reviewCnt);
+                reviewCnt =(Long) snapshot.child("reviewCount").getValue();
+//                reviewCount =Integer.parseInt(reviewCnt);
 
                 //set Values into Views
                 Picasso.get().load(imageUrl).into(articleImage);
@@ -94,7 +98,7 @@ public class ReviewerPage extends AppCompatActivity {
                 float newRating = ((currentRating + (reviewCount * prevRating)) / (reviewCount + 1));
 
                 // update the review count
-                dbreference.child("Article").child(ArticleId).child("reviewCount").setValue(reviewCount + 1);
+                dbreference.child("Article").child(ArticleId).child("reviewCount").setValue(reviewCnt + 1);
 
                 // update the review rating
                 dbreference.child("Article").child(ArticleId).child("Rating").setValue(newRating);
@@ -114,7 +118,14 @@ public class ReviewerPage extends AppCompatActivity {
                             l.add(r_id);
                         }
                         l.add(Reviewer_id);
-                        reviewers_ref.setValue(l);
+                        reviewers_ref.setValue(l).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Intent intent = new Intent(ReviewerPage.this,ReviewUnpostedArticles.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
                     }
 
                     @Override
@@ -143,5 +154,13 @@ public class ReviewerPage extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ReviewerPage.this,ReviewUnpostedArticles.class);
+        startActivity(intent);
+        finish();
+        super.onBackPressed();
     }
 }

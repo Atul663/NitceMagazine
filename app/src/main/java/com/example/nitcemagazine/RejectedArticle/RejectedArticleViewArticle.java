@@ -3,6 +3,7 @@ package com.example.nitcemagazine.RejectedArticle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -106,7 +107,7 @@ public class RejectedArticleViewArticle extends AppCompatActivity {
         repost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(categorySelected.equals(""))
+                if(categorySelected.equals("Select Category"))
                 {
                     Toast.makeText(RejectedArticleViewArticle.this, "Please select the category", Toast.LENGTH_SHORT).show();
                 }
@@ -117,12 +118,16 @@ public class RejectedArticleViewArticle extends AppCompatActivity {
                     mp.put("description", desc);
                     mp.put("authorUid", auth.getUid());
                     mp.put("Rating", "0");
-                    mp.put("reviewCount", "0");
                     mp.put("category", cat);
 
                     reference.child("Article").child(id).setValue(mp);
 
+                    reference.child("Article").child(id).child("reviewCount").setValue(0);
                     reference.child("RejectedArticle").child(id).removeValue();
+
+                    Intent intent = new Intent(RejectedArticleViewArticle.this,RejectedArticle.class);
+                    startActivity(intent);
+                    finish();
 
                 }
 
@@ -130,4 +135,11 @@ public class RejectedArticleViewArticle extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(RejectedArticleViewArticle.this,RejectedArticle.class);
+        startActivity(intent);
+        finish();
+        super.onBackPressed();
+    }
 }

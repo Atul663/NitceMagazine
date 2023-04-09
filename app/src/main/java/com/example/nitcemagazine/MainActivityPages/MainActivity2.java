@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -91,6 +92,8 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         setContentView(R.layout.activity_main2);
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
@@ -223,6 +226,7 @@ public class MainActivity2 extends AppCompatActivity {
                 } else if (id == R.id.reviewArticleNavDrawer) {
                     Intent intent = new Intent(MainActivity2.this, ReviewUnpostedArticles.class);
                     startActivity(intent);
+                    finish();
                 } else if (id == R.id.deleteArticleNavDrawer) {
                     Intent intent = new Intent(MainActivity2.this, DeleteArticle.class);
                     startActivity(intent);
