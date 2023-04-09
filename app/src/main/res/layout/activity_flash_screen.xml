@@ -63,7 +63,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
         android:layout_marginBottom="96dp"
-        android:fontFamily="@font/calistoga"
         android:text="NITC MAG-E"
         android:textColor="#029DE3"
         android:textSize="48sp"
