@@ -505,8 +505,6 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
     }
-
-    @Override
     protected void onStart() {
 
         FirebaseAuth auth1 = FirebaseAuth.getInstance();
@@ -516,53 +514,68 @@ public class MainActivity2 extends AppCompatActivity {
         ArrayList<String> ar = new ArrayList<>();
         SimpleDateFormat dtf = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        SimpleDateFormat dtf1 = new SimpleDateFormat("hh:mm a");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a");
 //        String time = sdf.format(timeStamp);
-        if(user1 != null)
-        {
-            if(user1.isEmailVerified()) {
-                reference1.child("RejectedArticle").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot ds : snapshot.getChildren()) {
-                            if (ds.child("authorUid").getValue().toString().equals(user1.getUid())) {
-                                Long time = (Long) ds.child("DateTime").getValue();
-                                try {
-                                    String date1 = sdf.format(time);
-                                    System.out.println(date1);
-                                    Long timeStamp = new Date().getTime();
-                                    String dt2 = sdf.format(timeStamp);
+        if (user1 != null) {
+            reference1.child("RejectedArticle").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        if (ds.child("authorUid").getValue().toString().equals(user1.getUid())) {
+                            Long time = (Long) ds.child("DateTime").getValue();
+                            try {
+                                String date1 = sdf.format(time);
+                                System.out.println(date1);
+                                Long timeStamp = new Date().getTime();
+                                String dt2 = sdf.format(timeStamp);
 
 
-                                    Date date = dtf.parse(date1);
-                                    Date date2 = dtf.parse(dt2);
-                                    long diff = date2.getTime() - date.getTime();
-                                    int day = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                                    System.out.println("min: " + TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS));
+                                Date date = dtf.parse(date1);
+                                Date date2 = dtf.parse(dt2);
+                                long diff = date2.getTime() - date.getTime();
+                                int day = (int) TimeUnit.DAYS.convert(diff, TimeUnit.DAYS);
+                                System.out.println("min: " + TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS));
 
-                                    if (day >= 7) {
-                                        reference.child("RejectedArticle").child(ds.getKey()).removeValue();
-                                    }
-                                } catch (Exception e) {
-                                    System.out.println(e);
+                                if (day >= 7) {
+                                    reference.child("RejectedArticle").child(ds.getKey()).removeValue();
                                 }
+
+//                                String date1m = sdf1.format(time);
+////                                System.out.println(date1);
+//                                Long timeStampm = new Date().getTime();
+//                                String dt2m = sdf1.format(timeStampm);
+////
+//                                Date datem = dtf1.parse(date1m);
+//                                Date date2m = dtf1.parse(dt2m);
+//                                long diff1 = date2m.getTime() - datem.getTime();
+//                                int daym = (int) TimeUnit.DAYS.convert(diff1, TimeUnit.MINUTES);
+//                                System.out.println("min: " + TimeUnit.MINUTES.convert(diff1, TimeUnit.MINUTES));
+//
+//                                if (daym >= 2) {
+//                                    reference.child("RejectedArticle").child(ds.getKey()).removeValue();
+//                                }
+
+
+                            } catch (Exception e) {
+                                System.out.println(e);
                             }
                         }
                     }
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                }
+            });
 
-            }
-            else {
-                auth1.signOut();
-            }
+
         }
         super.onStart();
-
     }
+
 
     @Override
     public void onBackPressed() {

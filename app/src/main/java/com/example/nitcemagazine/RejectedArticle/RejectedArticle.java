@@ -35,6 +35,7 @@ public class RejectedArticle extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
     ModelClass modelClass = new ModelClass();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,18 +50,21 @@ public class RejectedArticle extends AppCompatActivity {
         getArticle();
     }
 
-    void getArticle()
-    {
+    void getArticle() {
         reference.child("RejectedArticle").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                modelClass = snapshot.getValue(ModelClass.class);
-                if(snapshot.child("authorUid").getValue().toString().equalsIgnoreCase(user.getUid())) {
-                    articleList.add(modelClass);
-                    modelClass.setId(snapshot.getKey());
-                    System.out.println("hii " +modelClass.getId());
+                try {
+                    modelClass = snapshot.getValue(ModelClass.class);
+                    if (snapshot.child("authorUid").getValue().toString().equalsIgnoreCase(user.getUid())) {
+                        articleList.add(modelClass);
+                        modelClass.setId(snapshot.getKey());
+                        System.out.println("hii " + modelClass.getId());
 
-                    adapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
                 }
 
 
@@ -91,56 +95,4 @@ public class RejectedArticle extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onStart() {
-
-        FirebaseAuth auth1 = FirebaseAuth.getInstance();
-        FirebaseUser user1 = auth1.getCurrentUser();
-        FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-        DatabaseReference reference1 = database1.getReference();
-        ArrayList<String> ar = new ArrayList<>();
-        SimpleDateFormat dtf = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//        String time = sdf.format(timeStamp);
-        if(user1 != null)
-        {
-            reference1.child("RejectedArticle").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        if (ds.child("authorUid").getValue().toString().equals(user1.getUid())) {
-                            Long time = (Long) ds.child("DateTime").getValue();
-                            try {
-                                String date1 = sdf.format(time);
-                                System.out.println(date1);
-                                Long timeStamp = new Date().getTime();
-                                String dt2 = sdf.format(timeStamp);
-
-
-                                Date date = dtf.parse(date1);
-                                Date date2 = dtf.parse(dt2);
-                                long diff = date2.getTime() - date.getTime();
-                                int day = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                                System.out.println("min: " + TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS));
-
-                                if (day >= 7) {
-                                    reference.child("RejectedArticle").child(ds.getKey()).removeValue();
-                                }
-                            } catch (Exception e) {
-                                System.out.println(e);
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-
-        }
-        super.onStart();
-    }
 }

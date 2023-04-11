@@ -204,18 +204,22 @@ public class ViewArticle extends AppCompatActivity {
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//            }
-
-                System.out.println(imgfile.get(0));
-                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M)
-                {
-                    if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED)
-                    {
-                        String [] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                        requestPermissions(permissions,STORAGE_CODE);
-                    }
-                    else {
+                try {
+//                    System.out.println(imgfile.get(0));
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                            requestPermissions(permissions, STORAGE_CODE);
+                        } else {
+                            try {
+                                createPdf();
+                            } catch (FileNotFoundException e) {
+                                throw new RuntimeException(e);
+                            } catch (DocumentException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    } else {
                         try {
                             createPdf();
                         } catch (FileNotFoundException e) {
@@ -225,14 +229,9 @@ public class ViewArticle extends AppCompatActivity {
                         }
                     }
                 }
-                else {
-                    try {
-                        createPdf();
-                    } catch (FileNotFoundException e) {
-                        throw new RuntimeException(e);
-                    } catch (DocumentException e) {
-                        throw new RuntimeException(e);
-                    }
+                catch (Exception e)
+                {
+                    Toast.makeText(ViewArticle.this, e+"", Toast.LENGTH_SHORT).show();
                 }
             }
         });

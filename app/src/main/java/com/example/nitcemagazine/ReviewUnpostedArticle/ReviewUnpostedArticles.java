@@ -30,6 +30,7 @@ import java.util.List;
 
 public class ReviewUnpostedArticles extends AppCompatActivity {
 
+    int i = 0;
     RecyclerView unpostedArticle;
     ReviewUnpostedArticleAdapter reviewUnpostedArticleAdapter;
     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -63,6 +64,7 @@ public class ReviewUnpostedArticles extends AppCompatActivity {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                System.out.println("review "+i++);
                 for(DataSnapshot childSnapshot : snapshot.getChildren()){
 
                     String artId = childSnapshot.child("articleid").getValue().toString();
@@ -70,6 +72,7 @@ public class ReviewUnpostedArticles extends AppCompatActivity {
 
                     if(reviewers == null || !reviewers.contains(uid)){
                         unReviewedArticle.add(artId);
+                        System.out.println("unreviewed article "+i++);
                     }
                 }
                 System.out.println(unReviewedArticle);
@@ -87,43 +90,53 @@ public class ReviewUnpostedArticles extends AppCompatActivity {
     void getArticle()
     {
 
-        /*reference.child("Article").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                modelClass = snapshot.getValue(ModelClass.class);
-                articleList.add(modelClass);
-                modelClass.setId(snapshot.getKey());
-                reviewUnpostedArticleAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
+//        reference.child("Article").addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+////                modelClass = snapshot.getValue(ModelClass.class);
+////                articleList.add(modelClass);
+////                modelClass.setId(snapshot.getKey());
+////                reviewUnpostedArticleAdapter.notifyDataSetChanged();
+//
+//                String key=snapshot.getKey();
+//                System.out.println("xyz "+i++);
+//
+//                if(unReviewedArticle.contains(key)){
+//                    modelClass = snapshot.getValue(ModelClass.class);
+//                    articleList.add(modelClass);
+//                    modelClass.setId(snapshot.getKey());
+//                    reviewUnpostedArticleAdapter.notifyDataSetChanged();
+//                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
     //yaha se
-        reference.child("Article").addValueEventListener(new ValueEventListener() {
+        reference.child("Article").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot childSnapshot : snapshot.getChildren()){
                     String key=childSnapshot.getKey();
-
+                    System.out.println(key);
                     if(unReviewedArticle.contains(key)){
                         modelClass = childSnapshot.getValue(ModelClass.class);
                         articleList.add(modelClass);

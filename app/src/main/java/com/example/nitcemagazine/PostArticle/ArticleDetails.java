@@ -2,7 +2,7 @@ package com.example.nitcemagazine.PostArticle;
 
 public class ArticleDetails {
     public String title,description,category,authorUid,ArticleImage,Rating;
-    int reviewCount;
+    Long reviewCount;
 
     ArticleDetails(){}
 
@@ -13,6 +13,5 @@ public class ArticleDetails {
         this.category = category;
         this.ArticleImage = ArticleImage;
         this.Rating = "0";
-        this.reviewCount = 0;
     }
 }

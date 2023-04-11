@@ -152,6 +152,7 @@ public class AddPostFragement extends Fragment {
                     ArticleDetails articleDetails = new ArticleDetails(atitle, desc, categorySelected, auth.getCurrentUser().getUid(), filePath);
                     key = reference.child("Article").push().getKey();
                     reference.child("Article").child(key).setValue(articleDetails);
+                    reference.child("Article").child(key).child("reviewCount").setValue(0L);
 //                setArticleImage();
 
                     //Add article id with empty reviewer List to Review Table
