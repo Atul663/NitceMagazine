@@ -15,7 +15,6 @@
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:screenOrientation="portrait"
         android:theme="@style/Theme.NITCeMagazine"
         android:screenOrientation="portrait"
         tools:targetApi="31">
