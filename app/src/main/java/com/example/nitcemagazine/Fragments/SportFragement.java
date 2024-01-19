@@ -1,5 +1,7 @@
 package com.example.nitcemagazine.Fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -8,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -68,10 +71,10 @@ public class SportFragement extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 modelClass = snapshot.getValue(ModelClass.class);
                 if(modelClass.getCategory().equalsIgnoreCase("sport")) {
-
                     articleList.add(modelClass);
                     modelClass.setId(snapshot.getKey());
                     adapter.notifyDataSetChanged();
+
                 }
 
 
@@ -118,6 +121,16 @@ public class SportFragement extends Fragment {
                 return false;
             }
         });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+//                Toast.makeText(getActivity(), "hello", Toast.LENGTH_SHORT).show();
+                articleList.clear();
+                getArticle();
+                return false;
+            }
+        });
         super.onCreateOptionsMenu(menu, inflater);
     }
     private void txtSearch(String str){
@@ -131,6 +144,7 @@ public class SportFragement extends Fragment {
                 //
                 String auid=snapshot.child("authorUid").getValue().toString();
 
+                List<String> check = new ArrayList<>();
 
                 reference.child("UserType").child(auid).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -146,10 +160,13 @@ public class SportFragement extends Fragment {
 
                                 if(modelClass.getCategory().equalsIgnoreCase("sport") && (snapshot2.child("name").getValue().toString().toLowerCase().contains(str.toLowerCase()))) {
                                     System.out.println(modelClass.getTitle());
-
-                                    articleList2.add(modelClass);
-                                    modelClass.setId(snapshot.getKey());
-                                    adapter.notifyDataSetChanged();
+                                    if(!check.contains(modelClass.getId()))
+                                    {
+                                        check.add(modelClass.getId());
+                                        articleList2.add(modelClass);
+                                        modelClass.setId(snapshot.getKey());
+                                        adapter.notifyDataSetChanged();
+                                    }
                                 }
 
                             }
@@ -171,9 +188,13 @@ public class SportFragement extends Fragment {
                 //
                 if(modelClass.getCategory().equalsIgnoreCase("sport") && (modelClass.getTitle().toLowerCase().contains(str.toLowerCase()))) {
                     System.out.println(modelClass.getTitle());
-                    articleList2.add(modelClass);
-                    modelClass.setId(snapshot.getKey());
-                    adapter.notifyDataSetChanged();
+                    if(!check.contains(modelClass.getId()))
+                    {
+                        check.add(modelClass.getId());
+                        articleList2.add(modelClass);
+                        modelClass.setId(snapshot.getKey());
+                        adapter.notifyDataSetChanged();
+                    }
                 }
 
             }
